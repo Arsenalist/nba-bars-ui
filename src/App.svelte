@@ -30,6 +30,8 @@
         homePlayers = promise.homeTeam.players;
         boxScore = promise.boxScore;
         showLineupGraph(promise.lineups, promise.boxScore, promise.lineupIntervals, promise.lineupIntervalsText);
+        showPlayerLineupGraph(awayTeamLineupContainer, promise.awayPlayerLineups, promise.boxScore.awayTeam.players, promise.lineupIntervals, promise.lineupIntervalsText);
+        showPlayerLineupGraph(homeTeamLineupContainer, promise.homePlayerLineups, promise.boxScore.homeTeam.players, promise.lineupIntervals, promise.lineupIntervalsText);
     }
 
     async function playerSelected(personId) {
@@ -40,6 +42,8 @@
 
     let container;
     let lineupContainer;
+    let awayTeamLineupContainer;
+    let homeTeamLineupContainer;
     let games = [];
 
     import {onMount} from 'svelte';
@@ -75,6 +79,49 @@
                 throw new Error("problem");
             }
         }
+    }
+    function showPlayerLineupGraph(teamLineupContainer, awayPlayerLineups, players, lineupIntervals, lineupIntervalsText) {
+        teamLineupContainer.innerHTML = '';
+        const child = document.createElement('div');
+        lineupContainer.appendChild(child);
+        console.log("once: ", awayPlayerLineups);
+        const traces = awayPlayerLineups.map(l => {
+            const trace = {
+                x: l.map(v => v.duration),
+                //y: boxScore.awayTeam.players.map(p => p.name).reverse(),
+                y: players.map(p => p.name).reverse(),
+                name: '',
+               // text: l.labels.reverse(),
+                orientation: 'h',
+                textposition: 'inside', insidetextanchor: 'middle',
+                hoverinfo: 'text',
+                hovertext: l.map(v => v.lineupStats).reverse(),
+                hovertemplate: '%{hovertext}',
+                hovermode: 'x unified',
+                marker: {
+                    color: ''
+                },
+                type: 'bar'
+            };
+            trace.marker.color = l.map(v => v.inLineup ? "red" : "white" ).reverse();
+            return trace;
+        });
+        var layout = {
+            title: 'Team Lineups',
+            barmode: 'stack',
+            showlegend: false,
+            hovermode: 'closest',
+            xaxis: {
+                ticktext: lineupIntervalsText,
+                tickvals: lineupIntervals,
+                ticklen: 8,
+                tickwidth: 4,
+                tickcolor: '#c41141'
+            }
+        };
+
+        Plotly.newPlot(child, traces, layout);
+
     }
 
     import GameList from "./GameList.svelte";
@@ -194,6 +241,8 @@
     <div class="row">
         <div class="col">
             <div class="row" bind:this={lineupContainer}/>
+            <div class="row" bind:this={awayTeamLineupContainer}/>
+            <div class="row" bind:this={homeTeamLineupContainer}/>
         </div>
     </div>
     <div class="row">
