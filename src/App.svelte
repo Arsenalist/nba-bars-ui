@@ -29,6 +29,7 @@
         awayPlayers = promise.awayTeam.players;
         homePlayers = promise.homeTeam.players;
         boxScore = promise.boxScore;
+        showLineupGraph(promise.lineups, promise.boxScore, promise.lineupIntervals, promise.lineupIntervalsText);
     }
 
     async function playerSelected(personId) {
@@ -38,6 +39,7 @@
     }
 
     let container;
+    let lineupContainer;
     let games = [];
 
     import {onMount} from 'svelte';
@@ -79,7 +81,47 @@
     import TeamInfo from "./TeamInfo.svelte";
     import PlayerGameDetail from "./PlayerGameDetail.svelte";
     import PlayerList from "./PlayerList.svelte";
+    function showLineupGraph(lineups, box, lineupIntervals, lineupIntervalsText) {
+        lineupContainer.innerHTML = '';
+        const child = document.createElement('div');
+        lineupContainer.appendChild(child);
+        const traces = lineups.map(l => {
+            return {
+                x: l.values.reverse(),
+                y: [box.homeTeam.teamName, box.awayTeam.teamName],
+                name: '',
+                text: l.labels.reverse(),
+                orientation: 'h',
+                textposition: 'inside', insidetextanchor: 'middle',
+                hoverinfo: 'text',
+                hovertext: l.summary.reverse(),
+                hovertemplate: '%{hovertext}',
+                hovermode: 'x unified',
+                marker: {
+                    color: 'rgba(0, 0, 0,0.6)',
+                    width: 1,
+                    line: { color: 'rgb(255, 255, 255)', width: 5 }
+                },
+                type: 'bar'
+            };
+        });
+        var layout = {
+            title: 'Team Lineups',
+            barmode: 'stack',
+            showlegend: false,
+            hovermode: 'closest',
+            xaxis: {
+                ticktext: lineupIntervalsText,
+                tickvals: lineupIntervals,
+                ticklen: 8,
+                tickwidth: 4,
+                tickcolor: '#c41141'
+            }
+        };
 
+        Plotly.newPlot(child, traces, layout);
+
+    }
     function showGraphForPlayer(groupLabels, chartLabels, player) {
         container.innerHTML = '';
         for (let i = 0; i < player.positiveLabels.length; i++) {
@@ -150,9 +192,24 @@
         </div>
     </div>
     <div class="row">
+        <div class="col">
+            <div class="row" bind:this={lineupContainer}/>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-2">
-            <TeamInfo team={boxScore.awayTeam}/>
-            <PlayerList players={awayPlayers} playerSelected={playerSelected}/>
+            <div class="row">
+                <div class="col">
+                    <TeamInfo team={boxScore.awayTeam}/>
+                    <PlayerList players={awayPlayers} playerSelected={playerSelected}/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <TeamInfo team={boxScore.homeTeam}/>
+                    <PlayerList players={homePlayers} playerSelected={playerSelected}/>
+                </div>
+            </div>
         </div>
         <div class="col">
             <div class="row">
@@ -160,13 +217,7 @@
                     <PlayerGameDetail player={currentPlayer}/>
                 </div>
             </div>
-
             <div class="row" bind:this={container}/>
-
-        </div>
-        <div class="col-2">
-            <TeamInfo team={boxScore.homeTeam}/>
-            <PlayerList players={homePlayers} playerSelected={playerSelected}/>
         </div>
     </div>
 

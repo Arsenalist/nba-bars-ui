@@ -7,5 +7,5 @@
     }
 </style>
 {#if team}
-    <h3>{team.teamName}</h3>
+    <h5>{team.teamName}</h5>
 {/if}
