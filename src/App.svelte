@@ -1,10 +1,6 @@
-<svelte:head>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js" type="text/javascript"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
-
-</svelte:head>
 <script lang="ts">
+    import Nav from "./Nav.svelte";
+
     const endpoint = "NBA_API_ENDPOINT";
     import dayjs from 'dayjs'
 
@@ -30,8 +26,8 @@
         homePlayers = promise.homeTeam.players;
         boxScore = promise.boxScore;
         showLineupGraph(promise.lineups, promise.boxScore, promise.lineupIntervals, promise.lineupIntervalsText);
-        showPlayerLineupGraph(awayTeamLineupContainer, promise.awayPlayerLineups, promise.boxScore.awayTeam.players, promise.lineupIntervals, promise.lineupIntervalsText);
-        showPlayerLineupGraph(homeTeamLineupContainer, promise.homePlayerLineups, promise.boxScore.homeTeam.players, promise.lineupIntervals, promise.lineupIntervalsText);
+        showPlayerLineupGraph(awayTeamLineupContainer, promise.awayPlayerLineups, promise.boxScore.awayTeam, promise.lineupIntervals, promise.lineupIntervalsText);
+        showPlayerLineupGraph(homeTeamLineupContainer, promise.homePlayerLineups, promise.boxScore.homeTeam, promise.lineupIntervals, promise.lineupIntervalsText);
     }
 
     async function playerSelected(personId) {
@@ -80,18 +76,18 @@
             }
         }
     }
-    function showPlayerLineupGraph(teamLineupContainer, awayPlayerLineups, players, lineupIntervals, lineupIntervalsText) {
+
+    function showPlayerLineupGraph(teamLineupContainer, lineups, team, lineupIntervals, lineupIntervalsText) {
         teamLineupContainer.innerHTML = '';
         const child = document.createElement('div');
         lineupContainer.appendChild(child);
-        console.log("once: ", awayPlayerLineups);
-        const traces = awayPlayerLineups.map(l => {
+        const traces = lineups.map(l => {
             const trace = {
                 x: l.map(v => v.duration),
                 //y: boxScore.awayTeam.players.map(p => p.name).reverse(),
-                y: players.map(p => p.name).reverse(),
+                y: team.players.map(p => p.nameI).reverse(),
                 name: '',
-               // text: l.labels.reverse(),
+                // text: l.labels.reverse(),
                 orientation: 'h',
                 textposition: 'inside', insidetextanchor: 'middle',
                 hoverinfo: 'text',
@@ -103,11 +99,11 @@
                 },
                 type: 'bar'
             };
-            trace.marker.color = l.map(v => v.inLineup ? "red" : "white" ).reverse();
+            trace.marker.color = l.map(v => v.inLineup ? "red" : "white").reverse();
             return trace;
         });
         var layout = {
-            title: 'Team Lineups',
+            title: team.teamName,
             barmode: 'stack',
             showlegend: false,
             hovermode: 'closest',
@@ -117,7 +113,12 @@
                 ticklen: 8,
                 tickwidth: 4,
                 tickcolor: '#c41141'
-            }
+            },
+            l: 50,
+            r: 50,
+            b: 50,
+            t: 50,
+            pad: 4
         };
 
         Plotly.newPlot(child, traces, layout);
@@ -128,6 +129,7 @@
     import TeamInfo from "./TeamInfo.svelte";
     import PlayerGameDetail from "./PlayerGameDetail.svelte";
     import PlayerList from "./PlayerList.svelte";
+
     function showLineupGraph(lineups, box, lineupIntervals, lineupIntervalsText) {
         lineupContainer.innerHTML = '';
         const child = document.createElement('div');
@@ -147,7 +149,7 @@
                 marker: {
                     color: 'rgba(0, 0, 0,0.6)',
                     width: 1,
-                    line: { color: 'rgb(255, 255, 255)', width: 5 }
+                    line: {color: 'rgb(255, 255, 255)', width: 5}
                 },
                 type: 'bar'
             };
@@ -169,6 +171,7 @@
         Plotly.newPlot(child, traces, layout);
 
     }
+
     function showGraphForPlayer(groupLabels, chartLabels, player) {
         container.innerHTML = '';
         for (let i = 0; i < player.positiveLabels.length; i++) {
@@ -222,10 +225,10 @@
     <title>Barchart Demo</title>
 </head>
 <body>
-
-<div class="container">
-
-    <div class="row">
+<div class="starter-template">
+<main role="main" class="container">
+    <Nav/>
+    <main class="row">
         <div class="col text-center">
             <div class="btn-group" role="group" aria-label="Basic outlined example">
                 {#each dates as d}
@@ -270,8 +273,8 @@
         </div>
     </div>
 
+</main>
 </div>
-
 
 
 </body>
