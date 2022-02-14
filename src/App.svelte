@@ -98,7 +98,7 @@
                 },
                 type: 'bar'
             };
-            trace.marker.color = l.map(v => v.inLineup ? team.color : 'rgb(255,255,255,0)').reverse();
+            trace.marker.color = l.map(v => v.inLineup ? hexToRgba(team.color) : 'rgba(255,255,255,0)').reverse();
             return trace;
         });
         var layout = {
@@ -127,6 +127,8 @@
     import PlayerList from "./PlayerList.svelte";
 
     function showLineupGraph(lineups, box, lineupIntervals, lineupIntervalsText) {
+        const awayTeamColor = hexToRgba(box.awayTeam.color);
+        const homeTeamColor = hexToRgba(box.homeTeam.color);
         lineupContainer.innerHTML = '';
         const child = document.createElement('div');
         lineupContainer.appendChild(child);
@@ -143,9 +145,9 @@
                 hovertemplate: '%{hovertext}',
                 hovermode: 'x unified',
                 marker: {
-                    color: [box.homeTeam.color, box.awayTeam.color],
+                    color: [awayTeamColor, homeTeamColor],
                     width: 1,
-                    line: {color: '#eee', width: 1}
+                    line: {color: 'rgba(177, 177, 177, .9)', width: 1}
                 },
                 type: 'bar'
             };
@@ -216,6 +218,24 @@
         return;
 
     });
+
+    function hexToRgba(hex) {
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        const rgba = result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16),
+            a: .9
+        } : {
+            r: 22,
+            g: 22,
+            b: 22,
+            a: .9
+        };
+        return `rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, ${rgba.a})`;
+    }
+
+
 </script>
 
 <html>
