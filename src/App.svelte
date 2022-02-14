@@ -93,13 +93,12 @@
                 hoverinfo: 'text',
                 hovertext: l.map(v => v.lineupStats).reverse(),
                 hovertemplate: '%{hovertext}',
-                hovermode: 'x unified',
                 marker: {
-                    color: ''
+                    color: team.color,
                 },
                 type: 'bar'
             };
-            trace.marker.color = l.map(v => v.inLineup ? "red" : "white").reverse();
+            trace.marker.color = l.map(v => v.inLineup ? team.color : 'rgb(255,255,255,0)').reverse();
             return trace;
         });
         var layout = {
@@ -112,13 +111,10 @@
                 tickvals: lineupIntervals,
                 ticklen: 8,
                 tickwidth: 4,
-                tickcolor: '#c41141'
-            },
-            l: 50,
-            r: 50,
-            b: 50,
-            t: 50,
-            pad: 4
+                tickcolor: '#222',
+                gridcolor: '#222',
+                gridwidth: 4
+            }
         };
 
         Plotly.newPlot(child, traces, layout);
@@ -147,9 +143,9 @@
                 hovertemplate: '%{hovertext}',
                 hovermode: 'x unified',
                 marker: {
-                    color: 'rgba(0, 0, 0,0.6)',
+                    color: [box.homeTeam.color, box.awayTeam.color],
                     width: 1,
-                    line: {color: 'rgb(255, 255, 255)', width: 5}
+                    line: {color: '#eee', width: 1}
                 },
                 type: 'bar'
             };
@@ -164,7 +160,9 @@
                 tickvals: lineupIntervals,
                 ticklen: 8,
                 tickwidth: 4,
-                tickcolor: '#c41141'
+                tickcolor: '#222',
+                gridcolor: '#222',
+                gridwidth: 4
             }
         };
 
