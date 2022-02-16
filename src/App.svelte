@@ -3,6 +3,8 @@
 
     const endpoint = "NBA_API_ENDPOINT";
     import dayjs from 'dayjs'
+    import duration from 'dayjs/plugin/duration';
+    dayjs.extend(duration)
 
     let dates = [];
 
@@ -83,16 +85,15 @@
         lineupContainer.appendChild(child);
         const traces = lineups.map(l => {
             const trace = {
-                x: l.map(v => v.duration),
-                //y: boxScore.awayTeam.players.map(p => p.name).reverse(),
+                x: l.map(v => v.duration).reverse(),
                 y: team.players.map(p => p.nameI).reverse(),
                 name: '',
-                // text: l.labels.reverse(),
+                 text: l.map(v => v.inLineup ? v.duration : '').reverse(),
                 orientation: 'h',
                 textposition: 'inside', insidetextanchor: 'middle',
-                hoverinfo: 'text',
-                hovertext: l.map(v => v.lineupStats).reverse(),
-                hovertemplate: '%{hovertext}',
+                hoverinfo: l.map(v => v.inLineup ? 'text' : 'none').reverse(),
+                hovertext: l.map(v => v.inLineup ? secondsToDuration(v.duration) + '<br>' + toHtml(v.lineupStats) : '').reverse(),
+                hovertemplate: l.map(v => v.inLineup ? '%{hovertext}' : '').reverse(),
                 marker: {
                     color: team.color,
                 },
@@ -235,6 +236,14 @@
         return `rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, ${rgba.a})`;
     }
 
+
+    const toHtml = (stats) => {
+        return `${stats.points} PTS<br>${stats.assists} AST<br>${stats.rebounds} REB<br>${stats.blocks} BLK`;
+    }
+
+    const secondsToDuration = (seconds) => {
+        return dayjs.duration(seconds, 'seconds').format("m:ss");
+    }
 
 </script>
 
