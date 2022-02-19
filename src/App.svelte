@@ -88,7 +88,7 @@
                 x: l.map(v => v.duration).reverse(),
                 y: team.players.map(p => p.nameI).reverse(),
                 name: '',
-                 text: l.map(v => v.inLineup ? v.duration : '').reverse(),
+                 text: l.map(v => v.inLineup ? secondsToDuration(v.duration) : '').reverse(),
                 orientation: 'h',
                 textposition: 'inside', insidetextanchor: 'middle',
                 hoverinfo: l.map(v => v.inLineup ? 'text' : 'none').reverse(),
@@ -146,7 +146,7 @@
                 hovertemplate: '%{hovertext}',
                 hovermode: 'x unified',
                 marker: {
-                    color: [awayTeamColor, homeTeamColor],
+                    color: [homeTeamColor, awayTeamColor],
                     width: 1,
                     line: {color: 'rgba(177, 177, 177, .9)', width: 1}
                 },
