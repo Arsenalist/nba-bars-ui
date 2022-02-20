@@ -88,11 +88,11 @@
                 x: l.map(v => v.duration).reverse(),
                 y: team.players.map(p => p.nameI).reverse(),
                 name: '',
-                 text: l.map(v => v.inLineup ? secondsToDuration(v.duration) : '').reverse(),
+                 text: l.map(v => v.inLineup ? v.formattedLabel : '').reverse(),
                 orientation: 'h',
                 textposition: 'inside', insidetextanchor: 'middle',
                 hoverinfo: l.map(v => v.inLineup ? 'text' : 'none').reverse(),
-                hovertext: l.map(v => v.inLineup ? secondsToDuration(v.duration) + '<br>' + toHtml(v.lineupStats) : '').reverse(),
+                hovertext: l.map(v => v.inLineup ? v.formattedDetail : '').reverse(),
                 hovertemplate: l.map(v => v.inLineup ? '%{hovertext}' : '').reverse(),
                 marker: {
                     color: team.color,
@@ -237,8 +237,9 @@
     }
 
 
-    const toHtml = (stats) => {
-        return `${stats.points} PTS<br>${stats.assists} AST<br>${stats.rebounds} REB<br>${stats.blocks} BLK`;
+    const toHtml = (stats, actions) => {
+        const actionsStr = actions.map(a => a.actionType).join(",");
+        return `${stats.points} PTS<br>${stats.assists} AST<br>${stats.rebounds} REB<br>${stats.blocks} BLK${actionsStr}`;
     }
 
     const secondsToDuration = (seconds) => {
