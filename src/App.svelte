@@ -30,6 +30,7 @@
         showLineupGraph(promise.lineups, promise.boxScore, promise.lineupIntervals, promise.lineupIntervalsText);
         showPlayerLineupGraph(awayTeamLineupContainer, promise.awayPlayerLineups, promise.boxScore.awayTeam, promise.lineupIntervals, promise.lineupIntervalsText);
         showPlayerLineupGraph(homeTeamLineupContainer, promise.homePlayerLineups, promise.boxScore.homeTeam, promise.lineupIntervals, promise.lineupIntervalsText);
+        showDifferentialGraph(promise.differential, promise.lineupIntervals, promise.lineupIntervalsText, promise.boxScore)
     }
 
     async function playerSelected(personId) {
@@ -42,6 +43,7 @@
     let lineupContainer;
     let awayTeamLineupContainer;
     let homeTeamLineupContainer;
+    let differentialContainer;
     let games = [];
 
     import {onMount} from 'svelte';
@@ -77,6 +79,46 @@
                 throw new Error("problem");
             }
         }
+    }
+
+    function showDifferentialGraph(differential, lineupIntervals, lineupIntervalsText, boxScore) {
+        differentialContainer.innerHTML = '';
+        const child = document.createElement('div');
+        differentialContainer.appendChild(child);
+        var trace1 = {
+            x: differential.map(d => d.elapsedTimeInSeconds),
+            y: differential.map(d => d.awayMinusHomeDifference),
+            type: "scatter",
+            line: {shape: 'spline', color: "black" },
+            hoverinfo: 'text',
+            hovertext: differential.map(d => d.summary),
+            hovertemplate: '%{hovertext}<extra></extra>'
+
+        };
+        const yMax = Math.max(...trace1.y);
+        const yMin = Math.min(...trace1.y);
+        var layout = {
+            title: 'Lead Changes',
+            hovermode: 'closest',
+            showlegend: false,
+            xaxis: {
+                linecolor: differential.map(d => Math.random() < 0.5 ? "red" : "green"),
+                ticktext: lineupIntervalsText,
+                tickvals: lineupIntervals,
+                gridcolor: '#222',
+                gridwidth: 2
+
+            },
+            yaxis: {
+                ticktext: [`${boxScore.awayTeam.teamName} (${yMax})`, "0", `${boxScore.homeTeam.teamName} (${Math.abs(yMin)})`],
+                tickvals: [yMax, 0, yMin],
+            }
+        };
+
+        var data = [trace1];
+
+        Plotly.newPlot(child, data, layout);
+
     }
 
     function showPlayerLineupGraph(teamLineupContainer, lineups, team, lineupIntervals, lineupIntervalsText) {
@@ -271,8 +313,21 @@
     </div>
     <div class="row">
         <div class="col">
+            <div class="row" bind:this={differentialContainer}/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
             <div class="row" bind:this={lineupContainer}/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
             <div class="row" bind:this={awayTeamLineupContainer}/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
             <div class="row" bind:this={homeTeamLineupContainer}/>
         </div>
     </div>
