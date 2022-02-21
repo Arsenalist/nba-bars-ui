@@ -7,32 +7,46 @@
 
     dayjs.extend(duration)
 
-    let dates = [];
-
-    function getDatesToDisplay() {
-        const dates = [];
-        for (let i = 0; i != 5; i++) {
-            dates.push(dayjs().subtract(i, 'day'))
-        }
-        return dates.reverse();
-    }
-
     let promise;
     let awayPlayers = []
     let homePlayers = []
     let boxScore = {};
     let currentPlayer = {};
     let currentGameId = undefined;
+    let differentialData, lineupGraphData, awayPlayersLineupGraphData, homePlayersLineupGraphData;
+    let selectedTab = "game-charts";
+
     async function gameSelected(gameId) {
         currentGameId = gameId;
         promise = await getNbaBars(gameId);
         awayPlayers = promise.awayTeam.players;
         homePlayers = promise.homeTeam.players;
         boxScore = promise.boxScore;
-        showLineupGraph(promise.lineups, promise.boxScore, promise.lineupIntervals, promise.lineupIntervalsText);
-        showPlayerLineupGraph(awayTeamLineupContainer, promise.awayPlayerLineups, promise.boxScore.awayTeam, promise.lineupIntervals, promise.lineupIntervalsText);
-        showPlayerLineupGraph(homeTeamLineupContainer, promise.homePlayerLineups, promise.boxScore.homeTeam, promise.lineupIntervals, promise.lineupIntervalsText);
-        showDifferentialGraph(promise.differential, promise.lineupIntervals, promise.lineupIntervalsText, promise.boxScore)
+        lineupGraphData = {
+            lineups: promise.lineups,
+            boxScore: promise.boxScore,
+            lineupIntervals: promise.lineupIntervals,
+            lineupIntervalsText: promise.lineupIntervalsText
+        }
+        awayPlayersLineupGraphData = {
+            playerLineups: promise.awayPlayerLineups,
+            team: promise.boxScore.awayTeam,
+            lineupIntervals: promise.lineupIntervals,
+            lineupIntervalsText: promise.lineupIntervalsText
+        }
+
+        homePlayersLineupGraphData = {
+            playerLineups: promise.homePlayerLineups,
+            team: promise.boxScore.homeTeam,
+            lineupIntervals: promise.lineupIntervals,
+            lineupIntervalsText: promise.lineupIntervalsText
+        }
+        differentialData = {
+            differential: promise.differential,
+            lineupIntervals: promise.lineupIntervals,
+            lineupIntervalsText: promise.lineupIntervalsText,
+            boxScore: promise.boxScore,
+        }
     }
 
     async function playerSelected(personId) {
@@ -43,37 +57,17 @@
     }
 
     let container;
-    let lineupContainer;
-    let awayTeamLineupContainer;
-    let homeTeamLineupContainer;
-    let differentialContainer;
     let assistDistributionContainer;
-    let games = [];
+    let selectedDate;
 
-    import {onMount} from 'svelte';
-
-
-    async function setDate(e) {
+    async function setDate(d) {
         boxScore = {};
         awayPlayers = [];
         homePlayers = [];
         currentPlayer = {};
-        container.innerHTML = '';
-        games = await getGames(e.target.value);
+        selectedDate = d;
     }
 
-    async function getGames(date) {
-        const res = await fetch(`${endpoint}/games/${date}`)
-        if (res.ok) {
-            if (res.ok) {
-                return await res.json();
-            } else {
-                throw new Error("problem");
-            }
-        }
-    }
-
-    //
     async function getNbaBars(gameId) {
         const res = await fetch(`${endpoint}/bars/${gameId}`);
         if (res.ok) {
@@ -86,7 +80,6 @@
     }
 
     function showAssistDistributionGraphForPlayer(player, allAssistDistributions) {
-        console.log(allAssistDistributions);
         const pad = allAssistDistributions.find(ad => ad.player.personId === player.personId);
         var data = [{
             values: pad.assistScorers.map(s => s.numberOfAssists),
@@ -106,140 +99,16 @@
         Plotly.newPlot(assistDistributionContainer, data, layout);
     }
 
-    function showDifferentialGraph(differential, lineupIntervals, lineupIntervalsText, boxScore) {
-        differentialContainer.innerHTML = '';
-        const child = document.createElement('div');
-        differentialContainer.appendChild(child);
-        var trace1 = {
-            x: differential.map(d => d.elapsedTimeInSeconds),
-            y: differential.map(d => d.awayMinusHomeDifference),
-            type: "scatter",
-            line: {shape: 'spline', color: "black"},
-            hoverinfo: 'text',
-            hovertext: differential.map(d => d.summary),
-            hovertemplate: '%{hovertext}<extra></extra>'
-
-        };
-        const yMax = Math.max(...trace1.y);
-        const yMin = Math.min(...trace1.y);
-        var layout = {
-            title: 'Lead Changes',
-            hovermode: 'closest',
-            showlegend: false,
-            xaxis: {
-                linecolor: differential.map(d => Math.random() < 0.5 ? "red" : "green"),
-                ticktext: lineupIntervalsText,
-                tickvals: lineupIntervals,
-                gridcolor: '#222',
-                gridwidth: 2
-
-            },
-            yaxis: {
-                ticktext: [`${boxScore.awayTeam.teamName} (${yMax})`, "0", `${boxScore.homeTeam.teamName} (${Math.abs(yMin)})`],
-                tickvals: [yMax, 0, yMin],
-            }
-        };
-
-        var data = [trace1];
-
-        Plotly.newPlot(child, data, layout);
-
-    }
-
-    function showPlayerLineupGraph(teamLineupContainer, lineups, team, lineupIntervals, lineupIntervalsText) {
-        teamLineupContainer.innerHTML = '';
-        const child = document.createElement('div');
-        lineupContainer.appendChild(child);
-        const traces = lineups.map(l => {
-            const trace = {
-                x: l.map(v => v.duration).reverse(),
-                y: team.players.map(p => p.nameI).reverse(),
-                name: '',
-                text: l.map(v => v.inLineup ? v.formattedLabel : '').reverse(),
-                orientation: 'h',
-                textposition: 'inside', insidetextanchor: 'middle',
-                hoverinfo: l.map(v => v.inLineup ? 'text' : 'none').reverse(),
-                hovertext: l.map(v => v.inLineup ? v.formattedDetail : '').reverse(),
-                hovertemplate: l.map(v => v.inLineup ? '%{hovertext}' : '').reverse(),
-                marker: {
-                    color: team.color,
-                },
-                type: 'bar'
-            };
-            trace.marker.color = l.map(v => v.inLineup ? hexToRgba(team.color) : 'rgba(255,255,255,0)').reverse();
-            return trace;
-        });
-        var layout = {
-            title: team.teamName,
-            barmode: 'stack',
-            showlegend: false,
-            hovermode: 'closest',
-            xaxis: {
-                ticktext: lineupIntervalsText,
-                tickvals: lineupIntervals,
-                ticklen: 8,
-                tickwidth: 4,
-                tickcolor: '#222',
-                gridcolor: '#222',
-                gridwidth: 4
-            }
-        };
-
-        Plotly.newPlot(child, traces, layout);
-
-    }
-
     import GameList from "./GameList.svelte";
     import TeamInfo from "./TeamInfo.svelte";
     import PlayerGameDetail from "./PlayerGameDetail.svelte";
     import PlayerList from "./PlayerList.svelte";
     import GameTabs from "./GameTabs.svelte";
-
-    function showLineupGraph(lineups, box, lineupIntervals, lineupIntervalsText) {
-        const awayTeamColor = hexToRgba(box.awayTeam.color);
-        const homeTeamColor = hexToRgba(box.homeTeam.color);
-        lineupContainer.innerHTML = '';
-        const child = document.createElement('div');
-        lineupContainer.appendChild(child);
-        const traces = lineups.map(l => {
-            return {
-                x: l.values.reverse(),
-                y: [box.homeTeam.teamName, box.awayTeam.teamName],
-                name: '',
-                text: l.labels.reverse(),
-                orientation: 'h',
-                textposition: 'inside', insidetextanchor: 'middle',
-                hoverinfo: 'text',
-                hovertext: l.summary.reverse(),
-                hovertemplate: '%{hovertext}',
-                hovermode: 'x unified',
-                marker: {
-                    color: [homeTeamColor, awayTeamColor],
-                    width: 1,
-                    line: {color: 'rgba(177, 177, 177, .9)', width: 1}
-                },
-                type: 'bar'
-            };
-        });
-        var layout = {
-            title: 'Team Lineups',
-            barmode: 'stack',
-            showlegend: false,
-            hovermode: 'closest',
-            xaxis: {
-                ticktext: lineupIntervalsText,
-                tickvals: lineupIntervals,
-                ticklen: 8,
-                tickwidth: 4,
-                tickcolor: '#222',
-                gridcolor: '#222',
-                gridwidth: 4
-            }
-        };
-
-        Plotly.newPlot(child, traces, layout);
-
-    }
+    import BoxScore from "./BoxScore.svelte";
+    import DateList from "./DateList.svelte";
+    import DifferentialGraph from "./DifferentialGraph.svelte";
+    import TeamLineups from "./TeamLineups.svelte";
+    import PlayerLineupGraph from "./PlayerLineupGraph.svelte";
 
     function showGraphForPlayer(groupLabels, chartLabels, player) {
         container.innerHTML = '';
@@ -282,36 +151,9 @@
     }
 
 
-    onMount(async () => {
-        dates = getDatesToDisplay();
-        return;
-
-    });
-
-    function hexToRgba(hex) {
-        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        const rgba = result ? {
-            r: parseInt(result[1], 16),
-            g: parseInt(result[2], 16),
-            b: parseInt(result[3], 16),
-            a: .9
-        } : {
-            r: 22,
-            g: 22,
-            b: 22,
-            a: .9
-        };
-        return `rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, ${rgba.a})`;
-    }
-
-
-    const toHtml = (stats, actions) => {
-        const actionsStr = actions.map(a => a.actionType).join(",");
-        return `${stats.points} PTS<br>${stats.assists} AST<br>${stats.rebounds} REB<br>${stats.blocks} BLK${actionsStr}`;
-    }
-
-    const secondsToDuration = (seconds) => {
-        return dayjs.duration(seconds, 'seconds').format("m:ss");
+    function tabSelected(tab: string) {
+        console.log("setting selected tab to ", tab);
+        selectedTab = tab;
     }
 
 </script>
@@ -324,38 +166,31 @@
 <div class="starter-template">
 <main role="main" class="container">
     <Nav/>
-    <main class="row">
-        <div class="col text-center">
-            <div class="btn-group" role="group" aria-label="Basic outlined example">
-                {#each dates as d}
-                    <button on:click={setDate} type="button" value="{d.format('YYYY-MM-DD')}" class="btn btn-outline-primary">{d.format('ddd, MMM D')}</button>
-                {/each}
-            </div>
-        </div>
+    <DateList dateSetHandler={setDate} />
     <div class="row">
         <div class="col text-center d-flex justify-content-center">
-            <GameList games={games} gameSelected={gameSelected}/>
+            <GameList selectedDate={selectedDate} gameSelected={gameSelected}/>
         </div>
     </div>
-     <GameTabs gameId={currentGameId}/>
+     <GameTabs tabSelected={tabSelected} gameId={currentGameId}/>
     <div class="row">
         <div class="col">
-            <div class="row" bind:this={differentialContainer}/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div class="row" bind:this={lineupContainer}/>
+            <DifferentialGraph data={differentialData}/>
         </div>
     </div>
     <div class="row">
         <div class="col">
-            <div class="row" bind:this={awayTeamLineupContainer}/>
+            <TeamLineups data={lineupGraphData}/>
         </div>
     </div>
     <div class="row">
         <div class="col">
-            <div class="row" bind:this={homeTeamLineupContainer}/>
+            <PlayerLineupGraph data={awayPlayersLineupGraphData}/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <PlayerLineupGraph data={homePlayersLineupGraphData}/>
         </div>
     </div>
     <div class="row">
@@ -376,7 +211,7 @@
         <div class="col">
             <div class="row">
                 <div class="col">
-                    <PlayerGameDetail player={currentPlayer}/>
+                    <PlayerGameDetail player={currentPlayer.player}/>
                 </div>
             </div>
             <div class="row" bind:this={container}/>
@@ -387,7 +222,7 @@
             </div>
         </div>
     </div>
-
+        <BoxScore boxScore={boxScore}/>
 </main>
 </div>
 

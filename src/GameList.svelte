@@ -1,14 +1,36 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
-    const dispatch = createEventDispatcher();
+    import {onMount} from "svelte";
 
-    export let games;
+    export let selectedDate;
     export let gameSelected;
+
+    async function getGames(date) {
+        if (date) {
+            const endpoint = "NBA_API_ENDPOINT";
+            const res = await fetch(`${endpoint}/games/${date}`)
+            if (res.ok) {
+                return await res.json();
+            } else {
+                throw new Error("problem");
+            }
+        }
+    }
+
+    let promise;
+    $:  {
+        promise = getGames(selectedDate)
+    }
 
     function sendGameEvent(gameId) {
         gameSelected(gameId);
     }
+
+    onMount(async () => {
+        promise = getGames(selectedDate)
+    });
 </script>
+{#await promise then games}
+    {#if games}
 <div class="btn-group">
     {#each games as {boxscore, awayTeam, homeTeam, profile}}
             <button type="button" class="btn btn-outline-primary"  on:click={e => sendGameEvent(profile.gameId)}>
@@ -19,3 +41,5 @@
 
     {/each}
 </div>
+        {/if}
+{/await}
