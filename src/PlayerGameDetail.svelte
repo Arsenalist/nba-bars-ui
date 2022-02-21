@@ -18,7 +18,7 @@
 {#if player}
     <h4>{player.name}</h4>
     <div class="headshot">
-    <img class="headshot" src={`https://cdn.nba.com/headshots/nba/latest/1040x760/${player.player.personId}.png`}/>
+    <img class="headshot" src={`https://cdn.nba.com/headshots/nba/latest/1040x760/${player.personId}.png`}/>
     </div>
     <table class="table ">
         <BoxScoreHeaderRow/>

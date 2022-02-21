@@ -13,7 +13,8 @@
     let boxScore = {};
     let currentPlayer = {};
     let currentGameId = undefined;
-    let differentialData, lineupGraphData, awayPlayersLineupGraphData, homePlayersLineupGraphData;
+    let differentialData, lineupGraphData, awayPlayersLineupGraphData, homePlayersLineupGraphData,
+        assistDistributionGraphData;
     let selectedTab = "game-charts";
 
     async function gameSelected(gameId) {
@@ -53,11 +54,13 @@
         const player = awayPlayers.concat(homePlayers).find(p => p.player.personId === personId);
         currentPlayer = player;
         showGraphForPlayer(promise.groupLabels, promise.chartLabels, player);
-        showAssistDistributionGraphForPlayer(player.player, promise.awayTeam.assistDistribution.concat(promise.homeTeam.assistDistribution));
+        assistDistributionGraphData = {
+            player: player.player,
+            allAssistDistributions: promise.awayTeam.assistDistribution.concat(promise.homeTeam.assistDistribution)
+        }
     }
 
     let container;
-    let assistDistributionContainer;
     let selectedDate;
 
     async function setDate(d) {
@@ -79,26 +82,6 @@
         }
     }
 
-    function showAssistDistributionGraphForPlayer(player, allAssistDistributions) {
-        const pad = allAssistDistributions.find(ad => ad.player.personId === player.personId);
-        var data = [{
-            values: pad.assistScorers.map(s => s.numberOfAssists),
-            labels: pad.assistScorers.map(s => s.player.name),
-            textinfo: "label+value",
-            type: 'pie',
-            hole: .4,
-            name: 'name',
-            domain: {column: 0},
-        }];
-
-        var layout = {
-            title: `${player.statistics.assists} Assists`,
-            showlegend: false
-        };
-
-        Plotly.newPlot(assistDistributionContainer, data, layout);
-    }
-
     import GameList from "./GameList.svelte";
     import TeamInfo from "./TeamInfo.svelte";
     import PlayerGameDetail from "./PlayerGameDetail.svelte";
@@ -109,6 +92,7 @@
     import DifferentialGraph from "./DifferentialGraph.svelte";
     import TeamLineups from "./TeamLineups.svelte";
     import PlayerLineupGraph from "./PlayerLineupGraph.svelte";
+    import AssistDistributionGraph from "./AssistDistributionGraph.svelte";
 
     function showGraphForPlayer(groupLabels, chartLabels, player) {
         container.innerHTML = '';
@@ -216,9 +200,7 @@
             </div>
             <div class="row" bind:this={container}/>
             <div class="row">
-                <div class="col" bind:this={assistDistributionContainer}>
-
-                </div>
+                <AssistDistributionGraph data={assistDistributionGraphData}/>
             </div>
         </div>
     </div>
