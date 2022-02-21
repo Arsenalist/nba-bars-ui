@@ -2,10 +2,6 @@
     import Nav from "./Nav.svelte";
 
     const endpoint = "NBA_API_ENDPOINT";
-    import dayjs from 'dayjs'
-    import duration from 'dayjs/plugin/duration';
-
-    dayjs.extend(duration)
 
     let promise;
     let awayPlayers = []
@@ -14,7 +10,7 @@
     let currentPlayer = {};
     let currentGameId = undefined;
     let differentialData, lineupGraphData, awayPlayersLineupGraphData, homePlayersLineupGraphData,
-        assistDistributionGraphData;
+        assistDistributionGraphData, periodBarChartsGraphData;
     let selectedTab = "game-charts";
 
     async function gameSelected(gameId) {
@@ -53,21 +49,20 @@
     async function playerSelected(personId) {
         const player = awayPlayers.concat(homePlayers).find(p => p.player.personId === personId);
         currentPlayer = player;
-        showGraphForPlayer(promise.groupLabels, promise.chartLabels, player);
+        periodBarChartsGraphData = {
+            groupLabels: promise.groupLabels,
+            chartLabels: promise.chartLabels,
+            player: player
+        }
         assistDistributionGraphData = {
             player: player.player,
             allAssistDistributions: promise.awayTeam.assistDistribution.concat(promise.homeTeam.assistDistribution)
         }
     }
 
-    let container;
     let selectedDate;
 
     async function setDate(d) {
-        boxScore = {};
-        awayPlayers = [];
-        homePlayers = [];
-        currentPlayer = {};
         selectedDate = d;
     }
 
@@ -93,50 +88,9 @@
     import TeamLineups from "./TeamLineups.svelte";
     import PlayerLineupGraph from "./PlayerLineupGraph.svelte";
     import AssistDistributionGraph from "./AssistDistributionGraph.svelte";
-
-    function showGraphForPlayer(groupLabels, chartLabels, player) {
-        container.innerHTML = '';
-        for (let i = 0; i < player.positiveLabels.length; i++) {
-            const child = document.createElement('div');
-            child.setAttribute('class', 'col-lg-6')
-            container.appendChild(child);
-            const trace1 = {
-                x: groupLabels,
-                y: player.positiveValues[i],
-                name: 'Trace1',
-                type: 'bar',
-                textposition: 'auto',
-                marker: {color: 'green'},
-                text: player.positiveValues[i].map(p => `${p} ${player.positiveLabels[i]}`),
-            };
-            const trace2 = {
-                x: groupLabels,
-                y: player.negativeValues[i],
-                name: 'Trace2',
-                type: 'bar',
-                textposition: 'auto',
-                marker: {color: 'red'},
-                text: player.negativeValues[i].map(p => `${p} ${player.negativeLabels[i]}`),
-            };
-
-
-            const data = [trace1, trace2];
-            const layout = {
-                //xaxis: {title: p.periodLabel},
-                yaxis: {title: 'Value'},
-                barmode: 'grouped',
-                title: chartLabels[i],
-                showlegend: false,
-                responsive: true
-            };
-
-            new Plotly.newPlot(child, data, layout);
-        }
-    }
-
+    import PlayerPeriodBarCharts from "./PlayerPeriodBarCharts.svelte";
 
     function tabSelected(tab: string) {
-        console.log("setting selected tab to ", tab);
         selectedTab = tab;
     }
 
@@ -198,7 +152,7 @@
                     <PlayerGameDetail player={currentPlayer.player}/>
                 </div>
             </div>
-            <div class="row" bind:this={container}/>
+            <PlayerPeriodBarCharts data={periodBarChartsGraphData}/>
             <div class="row">
                 <AssistDistributionGraph data={assistDistributionGraphData}/>
             </div>
