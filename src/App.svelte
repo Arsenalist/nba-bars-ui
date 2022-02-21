@@ -4,6 +4,7 @@
     const endpoint = "NBA_API_ENDPOINT";
     import dayjs from 'dayjs'
     import duration from 'dayjs/plugin/duration';
+
     dayjs.extend(duration)
 
     let dates = [];
@@ -21,8 +22,9 @@
     let homePlayers = []
     let boxScore = {};
     let currentPlayer = {};
-
+    let currentGameId = undefined;
     async function gameSelected(gameId) {
+        currentGameId = gameId;
         promise = await getNbaBars(gameId);
         awayPlayers = promise.awayTeam.players;
         homePlayers = promise.homeTeam.players;
@@ -37,6 +39,7 @@
         const player = awayPlayers.concat(homePlayers).find(p => p.player.personId === personId);
         currentPlayer = player;
         showGraphForPlayer(promise.groupLabels, promise.chartLabels, player);
+        showAssistDistributionGraphForPlayer(player.player, promise.awayTeam.assistDistribution.concat(promise.homeTeam.assistDistribution));
     }
 
     let container;
@@ -44,6 +47,7 @@
     let awayTeamLineupContainer;
     let homeTeamLineupContainer;
     let differentialContainer;
+    let assistDistributionContainer;
     let games = [];
 
     import {onMount} from 'svelte';
@@ -81,6 +85,27 @@
         }
     }
 
+    function showAssistDistributionGraphForPlayer(player, allAssistDistributions) {
+        console.log(allAssistDistributions);
+        const pad = allAssistDistributions.find(ad => ad.player.personId === player.personId);
+        var data = [{
+            values: pad.assistScorers.map(s => s.numberOfAssists),
+            labels: pad.assistScorers.map(s => s.player.name),
+            textinfo: "label+value",
+            type: 'pie',
+            hole: .4,
+            name: 'name',
+            domain: {column: 0},
+        }];
+
+        var layout = {
+            title: `${player.statistics.assists} Assists`,
+            showlegend: false
+        };
+
+        Plotly.newPlot(assistDistributionContainer, data, layout);
+    }
+
     function showDifferentialGraph(differential, lineupIntervals, lineupIntervalsText, boxScore) {
         differentialContainer.innerHTML = '';
         const child = document.createElement('div');
@@ -89,7 +114,7 @@
             x: differential.map(d => d.elapsedTimeInSeconds),
             y: differential.map(d => d.awayMinusHomeDifference),
             type: "scatter",
-            line: {shape: 'spline', color: "black" },
+            line: {shape: 'spline', color: "black"},
             hoverinfo: 'text',
             hovertext: differential.map(d => d.summary),
             hovertemplate: '%{hovertext}<extra></extra>'
@@ -130,7 +155,7 @@
                 x: l.map(v => v.duration).reverse(),
                 y: team.players.map(p => p.nameI).reverse(),
                 name: '',
-                 text: l.map(v => v.inLineup ? v.formattedLabel : '').reverse(),
+                text: l.map(v => v.inLineup ? v.formattedLabel : '').reverse(),
                 orientation: 'h',
                 textposition: 'inside', insidetextanchor: 'middle',
                 hoverinfo: l.map(v => v.inLineup ? 'text' : 'none').reverse(),
@@ -168,6 +193,7 @@
     import TeamInfo from "./TeamInfo.svelte";
     import PlayerGameDetail from "./PlayerGameDetail.svelte";
     import PlayerList from "./PlayerList.svelte";
+    import GameTabs from "./GameTabs.svelte";
 
     function showLineupGraph(lineups, box, lineupIntervals, lineupIntervalsText) {
         const awayTeamColor = hexToRgba(box.awayTeam.color);
@@ -311,6 +337,7 @@
             <GameList games={games} gameSelected={gameSelected}/>
         </div>
     </div>
+     <GameTabs gameId={currentGameId}/>
     <div class="row">
         <div class="col">
             <div class="row" bind:this={differentialContainer}/>
@@ -353,6 +380,11 @@
                 </div>
             </div>
             <div class="row" bind:this={container}/>
+            <div class="row">
+                <div class="col" bind:this={assistDistributionContainer}>
+
+                </div>
+            </div>
         </div>
     </div>
 
