@@ -10,7 +10,7 @@
     let currentPlayer = {};
     let currentGameId = undefined;
     let differentialData, lineupGraphData, awayPlayersLineupGraphData, homePlayersLineupGraphData,
-        assistDistributionGraphData, periodBarChartsGraphData;
+        assistDistributionGraphData, periodBarChartsGraphData, awayTeamShotDistanceData, homeTeamShotDistanceData;
     let selectedTab = "game-charts";
 
     async function gameSelected(gameId) {
@@ -43,6 +43,21 @@
             lineupIntervals: promise.lineupIntervals,
             lineupIntervalsText: promise.lineupIntervalsText,
             boxScore: promise.boxScore,
+        }
+        awayTeamShotDistanceData = {
+            lineupIntervals: promise.lineupIntervals,
+            lineupIntervalsText: promise.lineupIntervalsText,
+            made: promise.awayTeam.shotDistance.filter(sd => sd.action.shotResult === "Made"),
+            missed: promise.awayTeam.shotDistance.filter(sd => sd.action.shotResult === "Missed"),
+            title: `${promise.boxScore.awayTeam.teamName} Shot Distance`
+        }
+
+        homeTeamShotDistanceData = {
+            lineupIntervals: promise.lineupIntervals,
+            lineupIntervalsText: promise.lineupIntervalsText,
+            made: promise.homeTeam.shotDistance.filter(sd => sd.action.shotResult === "Made"),
+            missed: promise.homeTeam.shotDistance.filter(sd => sd.action.shotResult === "Missed"),
+            title: `${promise.boxScore.homeTeam.teamName} Shot Distance`
         }
     }
 
@@ -89,6 +104,7 @@
     import PlayerLineupGraph from "./PlayerLineupGraph.svelte";
     import AssistDistributionGraph from "./AssistDistributionGraph.svelte";
     import PlayerPeriodBarCharts from "./PlayerPeriodBarCharts.svelte";
+    import TeamShotDistanceGraph from "./TeamShotDistanceGraph.svelte";
 
     function tabSelected(tab: string) {
         selectedTab = tab;
@@ -130,6 +146,16 @@
     <div class="row">
         <div class="col">
             <PlayerLineupGraph data={homePlayersLineupGraphData}/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <TeamShotDistanceGraph data={awayTeamShotDistanceData}/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <TeamShotDistanceGraph data={homeTeamShotDistanceData}/>
         </div>
     </div>
     {/if}
