@@ -6,7 +6,7 @@
     export let dateSetHandler;
     function getDatesToDisplay() {
         const dates = [];
-        for (let i = 0; i != 5; i++) {
+        for (let i = 0; i != 10; i++) {
             dates.push(dayjs().subtract(i, 'day'))
         }
         return dates.reverse();
