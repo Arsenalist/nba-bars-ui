@@ -5,7 +5,6 @@
     let container;
 
     function showAssistDistributionGraphForPlayer(player, allAssistDistributions) {
-        console.log("shoting assits")
         const pad = allAssistDistributions.find(ad => ad.player.personId === player.personId);
         var data = [{
             values: pad.assistScorers.map(s => s.numberOfAssists),
@@ -18,7 +17,7 @@
         }];
 
         var layout = {
-            title: `${player.statistics.assists} Assists`,
+            title: `Assist Distribution (${player.statistics.assists} AST)`,
             showlegend: false
         };
 

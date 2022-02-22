@@ -12,8 +12,10 @@
             const trace1 = {
                 x: groupLabels,
                 y: player.positiveValues[i],
-                name: 'Trace1',
                 type: 'bar',
+                hoverinfo: 'none',
+
+
                 textposition: 'auto',
                 marker: {color: 'green'},
                 text: player.positiveValues[i].map(p => `${p} ${player.positiveLabels[i]}`),
@@ -21,8 +23,8 @@
             const trace2 = {
                 x: groupLabels,
                 y: player.negativeValues[i],
-                name: 'Trace2',
                 type: 'bar',
+                hoverinfo: 'none',
                 textposition: 'auto',
                 marker: {color: 'red'},
                 text: player.negativeValues[i].map(p => `${p} ${player.negativeLabels[i]}`),
@@ -31,7 +33,6 @@
 
             const data = [trace1, trace2];
             const layout = {
-                //xaxis: {title: p.periodLabel},
                 yaxis: {title: 'Value'},
                 barmode: 'grouped',
                 title: chartLabels[i],
