@@ -1,16 +1,10 @@
 <script>
     import {hexToRgba} from "./hex-to-rgb";
-    import {onMount} from "svelte";
+    import {onMount, afterUpdate} from "svelte";
     export let data;
 
     let container;
 
-
-    $: {
-        if (data && data.playerLineups) {
-            showPlayerLineupGraph(data.playerLineups, data.team, data.lineupIntervals, data.lineupIntervalsText);
-        }
-    }
     function showPlayerLineupGraph(lineups, team, lineupIntervals, lineupIntervalsText) {
         container.innerHTML = '';
         const child = document.createElement('div');
@@ -53,10 +47,16 @@
         Plotly.newPlot(child, traces, layout);
     }
 
-    onMount(async () => {
+    function showGraph() {
         if (data && data.playerLineups) {
             showPlayerLineupGraph(data.playerLineups, data.team, data.lineupIntervals, data.lineupIntervalsText);
         }
+    }
+    afterUpdate( () => {
+        showGraph();
+    });
+    onMount( () => {
+        showGraph();
     });
 
 </script>

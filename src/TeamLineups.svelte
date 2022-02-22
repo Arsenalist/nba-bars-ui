@@ -1,16 +1,9 @@
 <script>
     import {hexToRgba} from "./hex-to-rgb";
-    import {onMount} from "svelte";
+    import {onMount, afterUpdate} from "svelte";
 
     export let data;
     let container;
-
-    $: {
-        if (data && data.lineups) {
-            showLineupGraph(data.lineups, data.boxScore, data.lineupIntervals, data.lineupIntervalsText);
-        }
-    }
-
 
     function showLineupGraph(lineups, box, lineupIntervals, lineupIntervalsText) {
         const awayTeamColor = hexToRgba(box.awayTeam.color);
@@ -57,10 +50,17 @@
         Plotly.newPlot(child, traces, layout);
     }
 
-    onMount(async () => {
+    function showGraph() {
         if (data && data.lineups) {
             showLineupGraph(data.lineups, data.boxScore, data.lineupIntervals, data.lineupIntervalsText);
         }
+    }
+    afterUpdate(() => {
+        showGraph();
+    });
+
+    onMount(() => {
+        showGraph();
     });
 </script>
 <div bind:this={container}/>

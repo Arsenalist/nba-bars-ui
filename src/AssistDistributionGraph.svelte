@@ -1,14 +1,8 @@
 <script>
-    import {onMount} from "svelte";
+    import {onMount, afterUpdate} from "svelte";
     export let data;
 
     let container;
-
-    $: {
-        if (data && data.player) {
-            showAssistDistributionGraphForPlayer(data.player, data.allAssistDistributions);
-        }
-    }
 
     function showAssistDistributionGraphForPlayer(player, allAssistDistributions) {
         console.log("shoting assits")
@@ -31,10 +25,16 @@
         Plotly.newPlot(container, data, layout);
     }
 
-    onMount(async () => {
-        if (data && data.playerLineups) {
+    function showGraph() {
+        if (data && data.player) {
             showAssistDistributionGraphForPlayer(data.player, data.allAssistDistributions);
         }
+    }
+    onMount(() => {
+        showGraph();
+    });
+    afterUpdate(() => {
+        showGraph();
     });
 
 </script>

@@ -1,13 +1,8 @@
 <script>
-    import {onMount} from "svelte";
+    import {onMount, afterUpdate} from "svelte";
 
     export let data;
 
-    $: {
-        if (data && data.player) {
-            showGraphForPlayer(data.player, data.chartLabels, data.player);
-        }
-    }
     let container;
     function showGraphForPlayer(groupLabels, chartLabels, player) {
         container.innerHTML = '';
@@ -49,11 +44,18 @@
         }
     }
 
-    onMount(async () => {
+    function showGraph() {
         if (data && data.player) {
             showGraphForPlayer(data.player, data.chartLabels, data.player);
         }
+    }
+    onMount(() => {
+        showGraph();
     });
+    afterUpdate(() => {
+        showGraph();
+    });
+
 
 </script>
 <div bind:this={container}/>

@@ -111,6 +111,7 @@
         </div>
     </div>
      <GameTabs tabSelected={tabSelected} gameId={currentGameId}/>
+    {#if selectedTab === "game-charts"}
     <div class="row">
         <div class="col">
             <DifferentialGraph data={differentialData}/>
@@ -131,6 +132,8 @@
             <PlayerLineupGraph data={homePlayersLineupGraphData}/>
         </div>
     </div>
+    {/if}
+    {#if selectedTab === "player-charts"}
     <div class="row">
         <div class="col-2">
             <div class="row">
@@ -158,7 +161,10 @@
             </div>
         </div>
     </div>
+    {/if}
+    {#if selectedTab === "box-score"}
         <BoxScore boxScore={boxScore}/>
+    {/if}
 </main>
 </div>
 

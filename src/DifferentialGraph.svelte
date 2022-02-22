@@ -1,19 +1,12 @@
 <script>
 
-    import {onMount} from "svelte";
+    import {onMount, afterUpdate} from "svelte";
 
     export let data;
-
     let container;
 
-    $: {
-        if (data && data.differential) {
-            showDifferentialGraph(data.differential, data.lineupIntervals, data.lineupIntervalsText, data.boxScore);
-        }
-    }
 
     function showDifferentialGraph(differential, lineupIntervals, lineupIntervalsText, boxScore) {
-        console.log("differential garph showing");
         container.innerHTML = '';
         const child = document.createElement('div');
         container.appendChild(child);
@@ -52,10 +45,17 @@
         Plotly.newPlot(child, data, layout);
     }
 
-    onMount(async () => {
+    function showGraph() {
         if (data && data.differential) {
             showDifferentialGraph(data.differential, data.lineupIntervals, data.lineupIntervalsText, data.boxScore);
         }
+    }
+
+    onMount(() => {
+        showGraph();
+    });
+    afterUpdate(async () => {
+        showGraph();
     });
 </script>
 <div bind:this={container}/>
