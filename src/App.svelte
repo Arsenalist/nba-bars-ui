@@ -16,6 +16,7 @@
     async function gameSelected(gameId) {
         currentGameId = gameId;
         promise = await getNbaBars(gameId);
+        selectedTab = "game-charts";
         awayPlayers = promise.awayTeam.players;
         homePlayers = promise.homeTeam.players;
         boxScore = promise.boxScore;
@@ -135,7 +136,7 @@
             <GameList selectedDate={selectedDate} gameSelected={gameSelected}/>
         </div>
     </div>
-     <GameTabs tabSelected={tabSelected} gameId={currentGameId}/>
+     <GameTabs tabSelectedHandler={tabSelected} selectedTab={selectedTab} gameId={currentGameId}/>
     {#if selectedTab === "game-charts"}
     <div class="row">
         <div class="col">
