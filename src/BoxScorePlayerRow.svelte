@@ -3,6 +3,7 @@
 </script>
 {#if player}
 <tr>
+    <td>{player.name}</td>
     <td>{player.statistics.points}</td>
     <td>{player.statistics.fieldGoalsMade}/{player.statistics.threePointersAttempted}</td>
     <td>{player.statistics.threePointersMade}/{player.statistics.fieldGoalsAttempted}</td>

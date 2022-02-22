@@ -160,8 +160,12 @@
         </div>
     </div>
     {/if}
-    {#if selectedTab === "box-score "}
-        <BoxScore boxScore={boxScore}/>
+    {#if selectedTab === "box-score"}
+        <div class="row">
+            <div class="col">
+                <BoxScore boxScore={boxScore}/>
+            </div>
+        </div>
     {/if}
 </main>
 </div>

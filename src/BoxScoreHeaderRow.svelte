@@ -1,5 +1,6 @@
 <thead>
 <tr>
+    <th>Name</th>
     <th>PTS</th>
     <th>FG</th>
     <th>3FG</th>
