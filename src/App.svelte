@@ -135,34 +135,32 @@
     {/if}
     {#if selectedTab === "player-charts"}
     <div class="row">
-        <div class="col-2">
-            <div class="row">
-                <div class="col">
-                    <TeamInfo team={boxScore.awayTeam}/>
-                    <PlayerList players={awayPlayers} playerSelected={playerSelected}/>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <TeamInfo team={boxScore.homeTeam}/>
-                    <PlayerList players={homePlayers} playerSelected={playerSelected}/>
-                </div>
-            </div>
+        <div class="col">
+            <TeamInfo team={boxScore.awayTeam}/>
+            <PlayerList players={awayPlayers} playerSelected={playerSelected}/>
         </div>
         <div class="col">
-            <div class="row">
-                <div class="col">
-                    <PlayerGameDetail player={currentPlayer.player}/>
-                </div>
-            </div>
+            <TeamInfo team={boxScore.homeTeam}/>
+            <PlayerList players={homePlayers} playerSelected={playerSelected}/>
+        </div>
+     </div>
+    <div class="row">
+        <div class="col">
+            <PlayerGameDetail player={currentPlayer.player}/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
             <PlayerPeriodBarCharts data={periodBarChartsGraphData}/>
-            <div class="row">
-                <AssistDistributionGraph data={assistDistributionGraphData}/>
-            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <AssistDistributionGraph data={assistDistributionGraphData}/>
         </div>
     </div>
     {/if}
-    {#if selectedTab === "box-score"}
+    {#if selectedTab === "box-score "}
         <BoxScore boxScore={boxScore}/>
     {/if}
 </main>

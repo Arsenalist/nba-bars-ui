@@ -8,7 +8,6 @@
         container.innerHTML = '';
         for (let i = 0; i < player.positiveLabels.length; i++) {
             const child = document.createElement('div');
-            child.setAttribute('class', 'col-lg-6')
             container.appendChild(child);
             const trace1 = {
                 x: groupLabels,
