@@ -10,7 +10,7 @@
     let currentPlayer = {};
     let currentGameId = undefined;
     let differentialData, lineupGraphData, awayPlayersLineupGraphData, homePlayersLineupGraphData,
-        assistDistributionGraphData, periodBarChartsGraphData, awayTeamShotDistanceData, homeTeamShotDistanceData;
+        assistDistributionGraphData, periodBarChartsGraphData, awayTeamShotDistanceData, homeTeamShotDistanceData, playerShotDistanceData;
     let selectedTab = "game-charts";
 
     async function gameSelected(gameId) {
@@ -73,6 +73,15 @@
             player: player.player,
             allAssistDistributions: promise.awayTeam.assistDistribution.concat(promise.homeTeam.assistDistribution)
         }
+
+        const allShots = promise.awayTeam.shotDistance.concat(promise.homeTeam.shotDistance);
+        playerShotDistanceData = {
+            lineupIntervals: promise.lineupIntervals,
+            lineupIntervalsText: promise.lineupIntervalsText,
+            made: allShots.filter(sd => sd.action.shotResult === "Made" && sd.action.personId === player.player.personId),
+            missed: allShots.filter(sd => sd.action.shotResult === "Missed" && sd.action.personId === player.player.personId),
+            title: `Shot Distance`
+        }
     }
 
     let selectedDate;
@@ -104,7 +113,7 @@
     import PlayerLineupGraph from "./PlayerLineupGraph.svelte";
     import AssistDistributionGraph from "./AssistDistributionGraph.svelte";
     import PlayerPeriodBarCharts from "./PlayerPeriodBarCharts.svelte";
-    import TeamShotDistanceGraph from "./TeamShotDistanceGraph.svelte";
+    import TeamShotDistanceGraph from "./ShotDistanceGraph.svelte";
 
     function tabSelected(tab: string) {
         selectedTab = tab;
@@ -183,6 +192,11 @@
     <div class="row">
         <div class="col">
             <AssistDistributionGraph data={assistDistributionGraphData}/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <TeamShotDistanceGraph data={playerShotDistanceData}/>
         </div>
     </div>
     {/if}

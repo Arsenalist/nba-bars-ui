@@ -12,7 +12,7 @@
             type: 'scatter',
             marker: { size: 12, color: "green" },
             hoverinfo: 'text',
-            hovertext: data.made.map(sd => `${sd.displayTime}<br>${sd.action.description}`),
+            hovertext: data.made.map(sd => `${sd.displayTime}, ${sd.action.shotDistance}' <br>${sd.action.description}`),
             hovertemplate: '%{hovertext}',
             hovermode: 'x unified',
 
@@ -25,7 +25,7 @@
             type: 'scatter',
             marker: { size: 12, color: "red" },
             hoverinfo: 'text',
-            hovertext: data.missed.map(sd => `${sd.displayTime}<br>${sd.action.description}`),
+            hovertext: data.missed.map(sd => `${sd.displayTime}, ${sd.action.shotDistance}' <br>${sd.action.description}`),
             hovertemplate: '%{hovertext}<extra></extra>',
             hovermode: 'x unified',
         };
