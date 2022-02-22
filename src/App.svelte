@@ -14,6 +14,7 @@
     let selectedTab = "game-charts";
 
     async function gameSelected(gameId) {
+        clearGraphs();
         currentGameId = gameId;
         promise = await getNbaBars(gameId);
         selectedTab = "game-charts";
@@ -88,7 +89,12 @@
     let selectedDate;
 
     async function setDate(d) {
+        clearGraphs();
         selectedDate = d;
+    }
+
+    function clearGraphs() {
+        selectedTab = "";
     }
 
     async function getNbaBars(gameId) {
@@ -136,7 +142,9 @@
             <GameList selectedDate={selectedDate} gameSelected={gameSelected}/>
         </div>
     </div>
-     <GameTabs tabSelectedHandler={tabSelected} selectedTab={selectedTab} gameId={currentGameId}/>
+    {#if selectedTab !== ""}
+        <GameTabs tabSelectedHandler={tabSelected} selectedTab={selectedTab} gameId={currentGameId}/>
+    {/if}
     {#if selectedTab === "game-charts"}
     <div class="row">
         <div class="col">
