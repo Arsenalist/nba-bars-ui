@@ -1,5 +1,6 @@
 <script>
     import {onMount, afterUpdate} from "svelte";
+    import {chartConfig, layoutConfig} from "./plotly";
 
     export let data;
     let container;
@@ -32,7 +33,7 @@
 
         var layout = {
             title: data.title,
-            showlegend: false,
+            ...layoutConfig(),
             hovermode: 'closest',
             xaxis: {
                 ticktext: data.lineupIntervalsText,
@@ -46,7 +47,7 @@
         };
 
 
-        Plotly.newPlot(container, [ trace1, trace2 ], layout);
+        Plotly.newPlot(container, [ trace1, trace2 ], layout, chartConfig());
 
     }
 

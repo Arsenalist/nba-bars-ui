@@ -1,6 +1,7 @@
 <script>
     import {onMount, afterUpdate} from "svelte";
     import {hexToRgba} from "./hex-to-rgb";
+    import {chartConfig, layoutConfig} from "./plotly";
 
     export let data;
     let container;
@@ -32,10 +33,10 @@
 
         const layout = {
             title: `${data.title} (${showGameStat(data.boxScore)})`,
-            showlegend: false
+            ...layoutConfig(),
         };
 
-        Plotly.newPlot(container, [ away, home ], layout);
+        Plotly.newPlot(container, [ away, home ], layout, chartConfig());
 
     }
 

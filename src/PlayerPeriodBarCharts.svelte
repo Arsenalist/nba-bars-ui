@@ -1,5 +1,6 @@
 <script>
     import {onMount, afterUpdate} from "svelte";
+    import {chartConfig, layoutConfig} from "./plotly";
 
     export let data;
 
@@ -36,11 +37,10 @@
                 yaxis: {title: 'Value'},
                 barmode: 'grouped',
                 title: chartLabels[i],
-                showlegend: false,
-                responsive: true
+                ...layoutConfig(),
             };
 
-            new Plotly.newPlot(child, data, layout);
+            new Plotly.newPlot(child, data, layout, chartConfig());
         }
     }
 

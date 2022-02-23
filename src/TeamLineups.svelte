@@ -1,6 +1,7 @@
 <script>
     import {hexToRgba} from "./hex-to-rgb";
     import {onMount, afterUpdate} from "svelte";
+    import {chartConfig, layoutConfig} from "./plotly";
 
     export let data;
     let container;
@@ -34,7 +35,7 @@
         var layout = {
             title: 'Team Lineups',
             barmode: 'stack',
-            showlegend: false,
+            ...layoutConfig(),
             hovermode: 'closest',
             xaxis: {
                 ticktext: lineupIntervalsText,
@@ -47,7 +48,7 @@
             }
         };
 
-        Plotly.newPlot(child, traces, layout);
+        Plotly.newPlot(child, traces, layout, chartConfig());
     }
 
     function showGraph() {

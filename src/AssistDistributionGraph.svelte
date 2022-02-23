@@ -1,5 +1,6 @@
 <script>
     import {onMount, afterUpdate} from "svelte";
+    import {chartConfig, layoutConfig} from "./plotly";
     export let data;
 
     let container;
@@ -18,10 +19,10 @@
 
         var layout = {
             title: `Assist Distribution (${player.statistics.assists} AST)`,
-            showlegend: false
+            ...layoutConfig()
         };
 
-        Plotly.newPlot(container, data, layout);
+        Plotly.newPlot(container, data, layout, chartConfig());
     }
 
     function showGraph() {

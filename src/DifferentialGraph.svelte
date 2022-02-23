@@ -1,6 +1,7 @@
 <script>
 
     import {onMount, afterUpdate} from "svelte";
+    import {chartConfig, layoutConfig} from "./plotly";
 
     export let data;
     let container;
@@ -25,7 +26,7 @@
         var layout = {
             title: 'Lead Changes',
             hovermode: 'closest',
-            showlegend: false,
+            ...layoutConfig(),
             xaxis: {
                 linecolor: differential.map(d => Math.random() < 0.5 ? "red" : "green"),
                 ticktext: lineupIntervalsText,
@@ -42,7 +43,7 @@
 
         var data = [trace1];
 
-        Plotly.newPlot(child, data, layout);
+        Plotly.newPlot(child, data, layout, chartConfig());
     }
 
     function showGraph() {
