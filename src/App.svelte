@@ -11,7 +11,8 @@
     let currentGameId = undefined;
     let differentialData, lineupGraphData, awayPlayersLineupGraphData, homePlayersLineupGraphData,
         assistDistributionGraphData, periodBarChartsGraphData, awayTeamShotDistanceData, homeTeamShotDistanceData,
-        playerShotDistanceData, teamPointsInThePaintGraphData, teamFastBreakPointsGraphData, teamPointsOffTurnoversGraphData;
+        playerShotDistanceData, teamPointsInThePaintGraphData, teamFastBreakPointsGraphData,
+        teamPointsOffTurnoversGraphData;
     let selectedTab = "game-charts";
 
     async function gameSelected(gameId) {
@@ -153,6 +154,7 @@
     import PlayerPeriodBarCharts from "./PlayerPeriodBarCharts.svelte";
     import TeamShotDistanceGraph from "./ShotDistanceGraph.svelte";
     import TeamComparisonByPeriodGraph from "./TeamComparisonByPeriodGraph.svelte";
+    import GameSummary from "./GameSummary.svelte";
 
     function tabSelected(tab: string) {
         selectedTab = tab;
@@ -176,6 +178,9 @@
     </div>
     {#if selectedTab !== ""}
         <GameTabs tabSelectedHandler={tabSelected} selectedTab={selectedTab} gameId={currentGameId}/>
+    {/if}
+    {#if boxScore !== ""}
+        <GameSummary boxScore={boxScore}/>
     {/if}
     {#if selectedTab === "game-charts"}
     <div class="row">

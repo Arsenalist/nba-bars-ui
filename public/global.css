@@ -61,3 +61,29 @@ button:not(:disabled):active {
 button:focus {
 	border-color: #666;
 }
+
+.btn-group .btn {
+	font-size: 0.7em;
+}
+.nav-tabs .nav-link.active {
+	background: #c41141;
+	color: white;
+}
+.nav-tabs, .nav-tabs.nav-link  {
+	border-bottom: 1px solid #c41141;
+}
+.game-summary {
+	border: solid #c41141;
+	border-width: 0 0 1px 0;
+}
+.game-list .btn, .date-list .btn {
+	background: #222;
+	color: white;
+}
+.game-list .btn-outline-primary, .date-list .btn-outline-primary{
+	border-color: #ccc;
+}
+.btn:focus {
+	outline: none;
+	box-shadow: none;
+}

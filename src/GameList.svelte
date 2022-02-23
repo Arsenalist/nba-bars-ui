@@ -31,7 +31,7 @@
 </script>
 {#await promise then games}
     {#if games}
-<div class="btn-group">
+<div class="btn-group game-list">
     {#each games as {boxscore, awayTeam, homeTeam, profile}}
             <button type="button" class="btn btn-outline-primary"  on:click={e => sendGameEvent(profile.gameId)}>
                     <div>{awayTeam.profile.name}  {#if boxscore.status != "1"} {boxscore.awayScore} {/if}</div>
