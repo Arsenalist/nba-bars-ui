@@ -24,7 +24,7 @@
         const yMax = Math.max(...trace1.y);
         const yMin = Math.min(...trace1.y);
         var layout = {
-            title: 'Lead Changes',
+            title: 'Points Differential',
             hovermode: 'closest',
             ...layoutConfig(),
             xaxis: {
