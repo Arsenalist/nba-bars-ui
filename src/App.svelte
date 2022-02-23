@@ -10,7 +10,8 @@
     let currentPlayer = {};
     let currentGameId = undefined;
     let differentialData, lineupGraphData, awayPlayersLineupGraphData, homePlayersLineupGraphData,
-        assistDistributionGraphData, periodBarChartsGraphData, awayTeamShotDistanceData, homeTeamShotDistanceData, playerShotDistanceData;
+        assistDistributionGraphData, periodBarChartsGraphData, awayTeamShotDistanceData, homeTeamShotDistanceData,
+        playerShotDistanceData, teamPointsInThePaintGraphData, teamFastBreakPointsGraphData, teamPointsOffTurnoversGraphData;
     let selectedTab = "game-charts";
 
     async function gameSelected(gameId) {
@@ -60,6 +61,36 @@
             made: promise.homeTeam.shotDistance.filter(sd => sd.action.shotResult === "Made"),
             missed: promise.homeTeam.shotDistance.filter(sd => sd.action.shotResult === "Missed"),
             title: `${promise.boxScore.homeTeam.teamName} Shot Distance`
+        }
+
+        teamPointsInThePaintGraphData = {
+            boxScore: promise.boxScore,
+            awayData: promise.awayTeam.pointsInThePaint,
+            homeData: promise.homeTeam.pointsInThePaint,
+            title: 'Points in the Paint',
+            lineupIntervals: promise.lineupIntervals,
+            lineupIntervalsText: promise.lineupIntervalsText,
+            teamStatistic: 'pointsInThePaint'
+        }
+
+        teamFastBreakPointsGraphData = {
+            boxScore: promise.boxScore,
+            awayData: promise.awayTeam.pointsFastBreak,
+            homeData: promise.homeTeam.pointsFastBreak,
+            title: 'Fastbreak Points',
+            lineupIntervals: promise.lineupIntervals,
+            lineupIntervalsText: promise.lineupIntervalsText,
+            teamStatistic: 'pointsFastBreak'
+        }
+
+        teamPointsOffTurnoversGraphData = {
+            boxScore: promise.boxScore,
+            awayData: promise.awayTeam.pointsFromTurnovers,
+            homeData: promise.homeTeam.pointsFromTurnovers,
+            title: 'Points Off Turnovers',
+            lineupIntervals: promise.lineupIntervals,
+            lineupIntervalsText: promise.lineupIntervalsText,
+            teamStatistic: 'pointsFromTurnovers'
         }
     }
 
@@ -121,6 +152,7 @@
     import AssistDistributionGraph from "./AssistDistributionGraph.svelte";
     import PlayerPeriodBarCharts from "./PlayerPeriodBarCharts.svelte";
     import TeamShotDistanceGraph from "./ShotDistanceGraph.svelte";
+    import TeamComparisonByPeriodGraph from "./TeamComparisonByPeriodGraph.svelte";
 
     function tabSelected(tab: string) {
         selectedTab = tab;
@@ -174,6 +206,21 @@
     <div class="row">
         <div class="col">
             <TeamShotDistanceGraph data={homeTeamShotDistanceData}/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <TeamComparisonByPeriodGraph data={teamPointsInThePaintGraphData}/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <TeamComparisonByPeriodGraph data={teamFastBreakPointsGraphData}/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <TeamComparisonByPeriodGraph data={teamPointsOffTurnoversGraphData}/>
         </div>
     </div>
     {/if}
