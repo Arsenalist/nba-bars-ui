@@ -162,11 +162,11 @@
 
 <html>
 <head>
-    <title>Barchart Demo</title>
+    <title>Bars</title>
 </head>
 <body>
 <div class="starter-template">
-<main role="main" class="container">
+<main role="main" class="container-fluid">
     <Nav/>
     <DateList dateSetHandler={setDate} />
     <div class="row">
