@@ -5,13 +5,13 @@
     export let data;
 
     let container;
-    function showGraphForPlayer(groupLabels, chartLabels, player) {
+    function showGraphForPlayer(lineupIntervalsText, chartLabels, player) {
         container.innerHTML = '';
         for (let i = 0; i < player.positiveLabels.length; i++) {
             const child = document.createElement('div');
             container.appendChild(child);
             const trace1 = {
-                x: groupLabels,
+                x: lineupIntervalsText,
                 y: player.positiveValues[i],
                 type: 'bar',
                 hoverinfo: 'none',
@@ -22,7 +22,7 @@
                 text: player.positiveValues[i].map(p => `${p} ${player.positiveLabels[i]}`),
             };
             const trace2 = {
-                x: groupLabels,
+                x: lineupIntervalsText,
                 y: player.negativeValues[i],
                 type: 'bar',
                 hoverinfo: 'none',
@@ -46,7 +46,7 @@
 
     function showGraph() {
         if (data && data.player) {
-            showGraphForPlayer(data.player, data.chartLabels, data.player);
+            showGraphForPlayer(data.lineupIntervalsText, data.chartLabels, data.player);
         }
     }
     onMount(() => {

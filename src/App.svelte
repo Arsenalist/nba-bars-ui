@@ -99,8 +99,8 @@
         const player = awayPlayers.concat(homePlayers).find(p => p.player.personId === personId);
         currentPlayer = player;
         periodBarChartsGraphData = {
-            groupLabels: promise.groupLabels,
             chartLabels: promise.chartLabels,
+            lineupIntervalsText: promise.lineupIntervalsText,
             player: player
         }
         assistDistributionGraphData = {
