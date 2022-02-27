@@ -12,7 +12,7 @@
     let differentialData, lineupGraphData, awayPlayersLineupGraphData, homePlayersLineupGraphData,
         assistDistributionGraphData, periodBarChartsGraphData, awayTeamShotDistanceData, homeTeamShotDistanceData,
         playerShotDistanceData, teamPointsInThePaintGraphData, teamFastBreakPointsGraphData,
-        teamPointsOffTurnoversGraphData;
+        teamPointsOffTurnoversGraphData, timeoutAnalysis;
     let selectedTab = "game-charts";
 
     async function gameSelected(gameId) {
@@ -93,6 +93,8 @@
             lineupIntervalsText: promise.lineupIntervalsText,
             teamStatistic: 'pointsFromTurnovers'
         }
+
+        timeoutAnalysis = promise.timeoutAnalysis;
     }
 
     async function playerSelected(personId) {
@@ -155,18 +157,13 @@
     import TeamShotDistanceGraph from "./ShotDistanceGraph.svelte";
     import TeamComparisonByPeriodGraph from "./TeamComparisonByPeriodGraph.svelte";
     import GameSummary from "./GameSummary.svelte";
+    import TimeoutAnalysis from "./TimeoutAnalysis.svelte";
 
     function tabSelected(tab: string) {
         selectedTab = tab;
     }
 
 </script>
-
-<html>
-<head>
-    <title>Bars</title>
-</head>
-<body>
 <div class="starter-template">
 <main role="main" class="container-fluid">
     <Nav/>
@@ -268,9 +265,12 @@
             </div>
         </div>
     {/if}
+    {#if selectedTab === "timeout-analysis"}
+        <div class="row">
+            <div class="col">
+                <TimeoutAnalysis timeoutAnalysis={timeoutAnalysis} boxScore={boxScore}/>
+            </div>
+        </div>
+    {/if}
 </main>
 </div>
-
-
-</body>
-</html>

@@ -28,6 +28,11 @@
                        class:active="{selectedTab === 'box-score'}"
                        on:click={onTabClick}>Box Score</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="#" data-tab-name="timeout-analysis"
+                       class:active="{selectedTab === 'timeout-analysis'}"
+                       on:click={onTabClick}>Timeout Analysis</a>
+                </li>
             </ul>
         </div>
     </div>
