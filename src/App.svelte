@@ -19,7 +19,7 @@
         clearGraphs();
         currentGameId = gameId;
         promise = await getNbaBars(gameId);
-        selectedTab = "game-charts";
+        selectedTab = "lineups";
         awayPlayers = promise.awayTeam.players;
         homePlayers = promise.homeTeam.players;
         boxScore = promise.boxScore;
@@ -179,7 +179,7 @@
     {#if boxScore !== ""}
         <GameSummary boxScore={boxScore}/>
     {/if}
-    {#if selectedTab === "game-charts"}
+    {#if selectedTab === "lineups"}
     <div class="row">
         <div class="col">
             <DifferentialGraph data={differentialData}/>
@@ -200,31 +200,37 @@
             <PlayerLineupGraph data={homePlayersLineupGraphData}/>
         </div>
     </div>
-    <div class="row">
-        <div class="col">
-            <TeamShotDistanceGraph data={awayTeamShotDistanceData}/>
+    {/if}
+    {#if selectedTab === "scoring"}
+        <div class="row">
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <TeamComparisonByPeriodGraph data={teamPointsInThePaintGraphData}/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <TeamComparisonByPeriodGraph data={teamFastBreakPointsGraphData}/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <TeamComparisonByPeriodGraph data={teamPointsOffTurnoversGraphData}/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <TeamShotDistanceGraph data={awayTeamShotDistanceData}/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <TeamShotDistanceGraph data={homeTeamShotDistanceData}/>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <TeamShotDistanceGraph data={homeTeamShotDistanceData}/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <TeamComparisonByPeriodGraph data={teamPointsInThePaintGraphData}/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <TeamComparisonByPeriodGraph data={teamFastBreakPointsGraphData}/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <TeamComparisonByPeriodGraph data={teamPointsOffTurnoversGraphData}/>
-        </div>
-    </div>
     {/if}
     {#if selectedTab === "player-charts"}
     <div class="row">

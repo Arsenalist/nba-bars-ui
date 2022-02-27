@@ -14,9 +14,14 @@
         <div class="col">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="#"  data-tab-name="game-charts"
-                       class:active="{selectedTab === 'game-charts'}"
-                       on:click={onTabClick}>Game Charts</a>
+                    <a class="nav-link" aria-current="page" href="#"  data-tab-name="lineups"
+                       class:active="{selectedTab === 'lineups'}"
+                       on:click={onTabClick}>Lineups</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="#"  data-tab-name="scoring"
+                       class:active="{selectedTab === 'scoring'}"
+                       on:click={onTabClick}>Scoring</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="#" data-tab-name="player-charts"
