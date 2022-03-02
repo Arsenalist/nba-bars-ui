@@ -12,20 +12,20 @@
         container.innerHTML = '';
         const child = document.createElement('div');
         container.appendChild(child);
-        const traces = lineups.map(l => {
+        const traces = lineups.reverse().map(l => {
             return {
-                x: l.values.reverse(),
-                y: [box.homeTeam.teamName, box.awayTeam.teamName],
+                x: l.values,
+                y: [box.awayTeam.teamName, box.homeTeam.teamName],
                 name: '',
-                text: l.labels.reverse(),
+                text: l.labels,
                 orientation: 'h',
                 textposition: 'inside', insidetextanchor: 'middle',
                 hoverinfo: 'text',
-                hovertext: l.summary.reverse(),
+                hovertext: l.summary,
                 hovertemplate: '%{hovertext}',
                 hovermode: 'x unified',
                 marker: {
-                    color: [homeTeamColor, awayTeamColor],
+                    color: [awayTeamColor, homeTeamColor],
                     width: 1,
                     line: {color: 'rgba(177, 177, 177, .9)', width: 1}
                 },
