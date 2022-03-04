@@ -15,18 +15,19 @@
                 x: l.map(v => v.duration).reverse(),
                 y: team.players.map(p => p.nameI).reverse(),
                 name: '',
-                text: l.map(v => v.inLineup ? v.plusMinusLabel : '').reverse(),
+                text: l.map(v => v.inLineup ? v.usageLabel : '').reverse(),
                 orientation: 'h',
                 textposition: 'inside', insidetextanchor: 'middle',
                 hoverinfo: l.map(v => v.inLineup ? 'text' : 'none').reverse(),
-                hovertext: l.map(v => v.inLineup ? v.plusMinusDetail : '').reverse(),
+                hovertext: l.map(v => v.inLineup ? v.usageDetail : '').reverse(),
                 hovertemplate: l.map(v => v.inLineup ? '%{hovertext}' : '').reverse(),
                 marker: {
                     color: team.color,
                 },
                 type: 'bar'
             };
-            trace.marker.color = l.map(v => v.inLineup ? hexToRgba(team.color) : 'rgba(255,255,255,0)').reverse();
+            console.log("passing to ", l.usageRateAlphaColor);
+            trace.marker.color = l.map(v => v.inLineup ? hexToRgba(team.color, v.usageRateAlphaColor) : 'rgba(255,255,255,0)').reverse();
             return trace;
         });
         var layout = {

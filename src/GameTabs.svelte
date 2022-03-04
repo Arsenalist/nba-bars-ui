@@ -19,6 +19,11 @@
                        on:click={onTabClick}>Lineups</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="#"  data-tab-name="usage"
+                       class:active="{selectedTab === 'usage'}"
+                       on:click={onTabClick}>Usage</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="#"  data-tab-name="scoring"
                        class:active="{selectedTab === 'scoring'}"
                        on:click={onTabClick}>Scoring</a>

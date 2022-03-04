@@ -158,6 +158,7 @@
     import TeamComparisonByPeriodGraph from "./TeamComparisonByPeriodGraph.svelte";
     import GameSummary from "./GameSummary.svelte";
     import TimeoutAnalysis from "./TimeoutAnalysis.svelte";
+    import LineupUsageGraph from "./LineupUsageGraph.svelte";
 
     function tabSelected(tab: string) {
         selectedTab = tab;
@@ -200,6 +201,18 @@
             <PlayerLineupGraph data={homePlayersLineupGraphData}/>
         </div>
     </div>
+    {/if}
+    {#if selectedTab === "usage"}
+        <div class="row">
+            <div class="col">
+                <LineupUsageGraph data={awayPlayersLineupGraphData}/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <LineupUsageGraph data={homePlayersLineupGraphData}/>
+            </div>
+        </div>
     {/if}
     {#if selectedTab === "scoring"}
         <div class="row">
