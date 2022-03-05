@@ -62,7 +62,4 @@
     });
 
 </script>
-<p>
-    This data may very well have bugs. Consider this BETA for sure.
-</p>
 <div bind:this={container}/>
