@@ -188,7 +188,12 @@
     </div>
     <div class="row">
         <div class="col">
-            <TeamLineups data={lineupGraphData}/>
+            <TeamLineups title="Plus/Minus by Lineup" data={lineupGraphData} textListName="labels" hoverListName="summary"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <TeamLineups title="OREB% by Lineup" data={lineupGraphData} textListName="offensiveReboundPercentage" hoverListName="offensiveReboundPercentageExplained"/>
         </div>
     </div>
     <div class="row">

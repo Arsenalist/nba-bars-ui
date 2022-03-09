@@ -3,7 +3,7 @@
     import {onMount, afterUpdate} from "svelte";
     import {chartConfig, layoutConfig} from "./plotly";
 
-    export let data;
+    export let data, textListName, hoverListName, title;
     let container;
 
     function showLineupGraph(lineups, box, lineupIntervals, lineupIntervalsText) {
@@ -17,11 +17,11 @@
                 x: l.values,
                 y: [box.awayTeam.teamName, box.homeTeam.teamName],
                 name: '',
-                text: l.labels,
+                text: l[textListName],
                 orientation: 'h',
                 textposition: 'inside', insidetextanchor: 'middle',
                 hoverinfo: 'text',
-                hovertext: l.summary,
+                hovertext: l[hoverListName],
                 hovertemplate: '%{hovertext}',
                 hovermode: 'x unified',
                 marker: {
@@ -33,7 +33,7 @@
             };
         });
         var layout = {
-            title: 'Team Lineups',
+            title:title,
             barmode: 'stack',
             ...layoutConfig(),
             hovermode: 'closest',
