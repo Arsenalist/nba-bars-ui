@@ -19,7 +19,7 @@
         clearGraphs();
         currentGameId = gameId;
         promise = await getNbaBars(gameId);
-        selectedTab = "lineups";
+        selectedTab = "plusMinus";
         awayPlayers = promise.awayTeam.players;
         homePlayers = promise.homeTeam.players;
         boxScore = promise.boxScore;
@@ -180,7 +180,7 @@
     {#if boxScore !== ""}
         <GameSummary boxScore={boxScore}/>
     {/if}
-    {#if selectedTab === "lineups"}
+    {#if selectedTab === "plusMinus"}
     <div class="row">
         <div class="col">
             <DifferentialGraph data={differentialData}/>
@@ -193,17 +193,19 @@
     </div>
     <div class="row">
         <div class="col">
-            <TeamLineups title="OREB% by Lineup" data={lineupGraphData} textListName="offensiveReboundPercentage" hoverListName="offensiveReboundPercentageExplained"  alphaColorListName="offensiveReboundAlphaColor"/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
             <PlayerLineupGraph data={awayPlayersLineupGraphData}/>
         </div>
     </div>
     <div class="row">
         <div class="col">
             <PlayerLineupGraph data={homePlayersLineupGraphData}/>
+        </div>
+    </div>
+    {/if}
+    {#if selectedTab === "rebounding"}
+    <div class="row">
+        <div class="col">
+            <TeamLineups title="OREB% by Lineup" data={lineupGraphData} textListName="offensiveReboundPercentage" hoverListName="offensiveReboundPercentageExplained"  alphaColorListName="offensiveReboundAlphaColor"/>
         </div>
     </div>
     {/if}

@@ -14,9 +14,14 @@
         <div class="col">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="#"  data-tab-name="lineups"
-                       class:active="{selectedTab === 'lineups'}"
-                       on:click={onTabClick}>Lineups</a>
+                    <a class="nav-link" aria-current="page" href="#"  data-tab-name="plusMinus"
+                       class:active="{selectedTab === 'plusMinus'}"
+                       on:click={onTabClick}>Plus/Minus</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="#"  data-tab-name="rebounding"
+                       class:active="{selectedTab === 'rebounding'}"
+                       on:click={onTabClick}>Rebounding</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="#"  data-tab-name="usage"
