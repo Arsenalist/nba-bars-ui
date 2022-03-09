@@ -26,7 +26,6 @@
                 },
                 type: 'bar'
             };
-            console.log("passing to ", l.usageRateAlphaColor);
             trace.marker.color = l.map(v => v.inLineup ? hexToRgba(team.color, v.usageRateAlphaColor) : 'rgba(255,255,255,0)').reverse();
             return trace;
         });

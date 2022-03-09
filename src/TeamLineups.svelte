@@ -3,17 +3,15 @@
     import {onMount, afterUpdate} from "svelte";
     import {chartConfig, layoutConfig} from "./plotly";
 
-    export let data, textListName, hoverListName, title;
+    export let data, textListName, hoverListName, title, alphaColorListName;
     let container;
 
     function showLineupGraph(lineups, box, lineupIntervals, lineupIntervalsText) {
-        const awayTeamColor = hexToRgba(box.awayTeam.color);
-        const homeTeamColor = hexToRgba(box.homeTeam.color);
         container.innerHTML = '';
         const child = document.createElement('div');
         container.appendChild(child);
-        const traces = lineups.reverse().map(l => {
-            return {
+        const traces = lineups.reverse().map((l, index) => {
+            const trace = {
                 x: l.values,
                 y: [box.awayTeam.teamName, box.homeTeam.teamName],
                 name: '',
@@ -25,12 +23,18 @@
                 hovertemplate: '%{hovertext}',
                 hovermode: 'x unified',
                 marker: {
-                    color: [awayTeamColor, homeTeamColor],
+                    color: {},
                     width: 1,
                     line: {color: 'rgba(177, 177, 177, .9)', width: 1}
                 },
                 type: 'bar'
             };
+            if (alphaColorListName) {
+                trace.marker.color = [hexToRgba(box.awayTeam.color, l[alphaColorListName][0]), hexToRgba(box.homeTeam.color, l[alphaColorListName][1])]
+            } else {
+                trace.marker.color = [hexToRgba(box.awayTeam.color), hexToRgba(box.homeTeam.color)]
+            }
+            return trace;
         });
         var layout = {
             title:title,

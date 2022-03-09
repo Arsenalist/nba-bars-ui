@@ -193,7 +193,7 @@
     </div>
     <div class="row">
         <div class="col">
-            <TeamLineups title="OREB% by Lineup" data={lineupGraphData} textListName="offensiveReboundPercentage" hoverListName="offensiveReboundPercentageExplained"/>
+            <TeamLineups title="OREB% by Lineup" data={lineupGraphData} textListName="offensiveReboundPercentage" hoverListName="offensiveReboundPercentageExplained"  alphaColorListName="offensiveReboundAlphaColor"/>
         </div>
     </div>
     <div class="row">
