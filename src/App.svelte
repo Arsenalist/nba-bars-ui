@@ -210,7 +210,7 @@
     </div>
     <div class="row">
         <div class="col">
-            <TeamLineups title="OREB% by Lineup" data={lineupGraphData} textListName="defensiveReboundPercentage" hoverListName="defensiveReboundPercentageExplained"  alphaColorListName="defensiveReboundAlphaColor"/>
+            <TeamLineups title="DREB% by Lineup" data={lineupGraphData} textListName="defensiveReboundPercentage" hoverListName="defensiveReboundPercentageExplained"  alphaColorListName="defensiveReboundAlphaColor"/>
         </div>
     </div>
     {/if}
