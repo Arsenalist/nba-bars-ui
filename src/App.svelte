@@ -202,6 +202,19 @@
         </div>
     </div>
     {/if}
+    {#if selectedTab === "ratings"}
+        <div class="row">
+            <div class="col">
+                <TeamLineups title="Offensive Rating by Lineup" data={lineupGraphData} textListName="ortg" hoverListName="ortgExplained" alphaColorListName="ortgAlphaColor" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <TeamLineups title="Defensive Rating by Lineup" data={lineupGraphData} textListName="drtg" hoverListName="drtgExplained"  alphaColorListName="drtgAlphaColor"/>
+            </div>
+        </div>
+    {/if}
+
     {#if selectedTab === "rebounding"}
     <div class="row">
         <div class="col">
@@ -210,7 +223,7 @@
     </div>
     <div class="row">
         <div class="col">
-            <TeamLineups title="DREB% by Lineup" data={lineupGraphData} textListName="defensiveReboundPercentage" hoverListName="defensiveReboundPercentageExplained"  alphaColorListName="defensiveReboundAlphaColor"/>
+            <TeamLineups   title="DREB% by Lineup" data={lineupGraphData} textListName="defensiveReboundPercentage" hoverListName="defensiveReboundPercentageExplained"  alphaColorListName="defensiveReboundAlphaColor"/>
         </div>
     </div>
     {/if}

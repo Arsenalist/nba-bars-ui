@@ -24,6 +24,11 @@
                        on:click={onTabClick}>Rebounding</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="#"  data-tab-name="ratings"
+                       class:active="{selectedTab === 'ratings'}"
+                       on:click={onTabClick}>Ratings</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="#"  data-tab-name="usage"
                        class:active="{selectedTab === 'usage'}"
                        on:click={onTabClick}>Usage</a>
