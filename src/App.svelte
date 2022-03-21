@@ -1,147 +1,25 @@
 <script lang="ts">
     import Nav from "./Nav.svelte";
-
-    const endpoint = "NBA_API_ENDPOINT";
-
-    let promise;
-    let awayPlayers = []
-    let homePlayers = []
-    let boxScore = {};
-    let currentPlayer = {};
-    let currentGameId = undefined;
-    let differentialData, lineupGraphData, awayPlayersLineupGraphData, homePlayersLineupGraphData,
-        assistDistributionGraphData, periodBarChartsGraphData, awayTeamShotDistanceData, homeTeamShotDistanceData,
-        playerShotDistanceData, teamPointsInThePaintGraphData, teamFastBreakPointsGraphData,
-        teamPointsOffTurnoversGraphData, timeoutAnalysis;
-    let selectedTab = "game-charts";
-
-    async function gameSelected(gameId) {
-        clearGraphs();
-        currentGameId = gameId;
-        promise = await getNbaBars(gameId);
-        selectedTab = "plusMinus";
-        awayPlayers = promise.awayTeam.players;
-        homePlayers = promise.homeTeam.players;
-        boxScore = promise.boxScore;
-        lineupGraphData = {
-            lineups: promise.lineups,
-            boxScore: promise.boxScore,
-            lineupIntervals: promise.lineupIntervals,
-            lineupIntervalsText: promise.lineupIntervalsText
-        }
-        awayPlayersLineupGraphData = {
-            playerLineups: promise.awayPlayerLineups,
-            team: promise.boxScore.awayTeam,
-            lineupIntervals: promise.lineupIntervals,
-            lineupIntervalsText: promise.lineupIntervalsText
-        }
-
-        homePlayersLineupGraphData = {
-            playerLineups: promise.homePlayerLineups,
-            team: promise.boxScore.homeTeam,
-            lineupIntervals: promise.lineupIntervals,
-            lineupIntervalsText: promise.lineupIntervalsText
-        }
-        differentialData = {
-            differential: promise.differential,
-            lineupIntervals: promise.lineupIntervals,
-            lineupIntervalsText: promise.lineupIntervalsText,
-            boxScore: promise.boxScore,
-        }
-        awayTeamShotDistanceData = {
-            lineupIntervals: promise.lineupIntervals,
-            lineupIntervalsText: promise.lineupIntervalsText,
-            made: promise.awayTeam.shotDistance.filter(sd => sd.action.shotResult === "Made"),
-            missed: promise.awayTeam.shotDistance.filter(sd => sd.action.shotResult === "Missed"),
-            title: `${promise.boxScore.awayTeam.teamName} Shot Distance`
-        }
-
-        homeTeamShotDistanceData = {
-            lineupIntervals: promise.lineupIntervals,
-            lineupIntervalsText: promise.lineupIntervalsText,
-            made: promise.homeTeam.shotDistance.filter(sd => sd.action.shotResult === "Made"),
-            missed: promise.homeTeam.shotDistance.filter(sd => sd.action.shotResult === "Missed"),
-            title: `${promise.boxScore.homeTeam.teamName} Shot Distance`
-        }
-
-        teamPointsInThePaintGraphData = {
-            boxScore: promise.boxScore,
-            awayData: promise.awayTeam.pointsInThePaint,
-            homeData: promise.homeTeam.pointsInThePaint,
-            title: 'Points in the Paint',
-            lineupIntervals: promise.lineupIntervals,
-            lineupIntervalsText: promise.lineupIntervalsText,
-            teamStatistic: 'pointsInThePaint'
-        }
-
-        teamFastBreakPointsGraphData = {
-            boxScore: promise.boxScore,
-            awayData: promise.awayTeam.pointsFastBreak,
-            homeData: promise.homeTeam.pointsFastBreak,
-            title: 'Fastbreak Points',
-            lineupIntervals: promise.lineupIntervals,
-            lineupIntervalsText: promise.lineupIntervalsText,
-            teamStatistic: 'pointsFastBreak'
-        }
-
-        teamPointsOffTurnoversGraphData = {
-            boxScore: promise.boxScore,
-            awayData: promise.awayTeam.pointsFromTurnovers,
-            homeData: promise.homeTeam.pointsFromTurnovers,
-            title: 'Points Off Turnovers',
-            lineupIntervals: promise.lineupIntervals,
-            lineupIntervalsText: promise.lineupIntervalsText,
-            teamStatistic: 'pointsFromTurnovers'
-        }
-
-        timeoutAnalysis = promise.timeoutAnalysis;
-    }
-
-    async function playerSelected(personId) {
-        const player = awayPlayers.concat(homePlayers).find(p => p.player.personId === personId);
-        currentPlayer = player;
-        periodBarChartsGraphData = {
-            chartLabels: promise.chartLabels,
-            lineupIntervalsText: promise.lineupIntervalsText,
-            player: player
-        }
-        assistDistributionGraphData = {
-            player: player.player,
-            allAssistDistributions: promise.awayTeam.assistDistribution.concat(promise.homeTeam.assistDistribution)
-        }
-
-        const allShots = promise.awayTeam.shotDistance.concat(promise.homeTeam.shotDistance);
-        playerShotDistanceData = {
-            lineupIntervals: promise.lineupIntervals,
-            lineupIntervalsText: promise.lineupIntervalsText,
-            made: allShots.filter(sd => sd.action.shotResult === "Made" && sd.action.personId === player.player.personId),
-            missed: allShots.filter(sd => sd.action.shotResult === "Missed" && sd.action.personId === player.player.personId),
-            title: `Shot Distance`
-        }
-    }
-
-    let selectedDate;
-
-    async function setDate(d) {
-        clearGraphs();
-        selectedDate = d;
-    }
-
-    function clearGraphs() {
-        selectedTab = "";
-    }
-
-    async function getNbaBars(gameId) {
-        const res = await fetch(`${endpoint}/bars/${gameId}`);
-        if (res.ok) {
-            if (res.ok) {
-                return await res.json();
-            } else {
-                throw new Error("problem");
-            }
-        }
-    }
-
+    import {
+        awayPlayers,
+        homePlayers,
+        lineupGraphData,
+        awayPlayersLineupGraphData,
+        homePlayersLineupGraphData,
+        differentialData,
+        awayTeamShotDistanceData,
+        homeTeamShotDistanceData,
+        teamPointsInThePaintGraphData,
+        teamFastBreakPointsGraphData,
+        teamPointsOffTurnoversGraphData,
+        timeoutAnalysis,
+        boxScore,
+        periodBarChartsGraphData,
+        assistDistributionGraphData,
+        playerShotDistanceData,
+        player
+    } from './stores/singe-game';
+    import {Router, Route} from "svelte-navigator";
     import GameList from "./GameList.svelte";
     import TeamInfo from "./TeamInfo.svelte";
     import PlayerGameDetail from "./PlayerGameDetail.svelte";
@@ -159,162 +37,167 @@
     import GameSummary from "./GameSummary.svelte";
     import TimeoutAnalysis from "./TimeoutAnalysis.svelte";
     import LineupUsageGraph from "./LineupUsageGraph.svelte";
-
-    function tabSelected(tab: string) {
-        selectedTab = tab;
-    }
+    import GameLoader from "./GameLoader.svelte";
 
 </script>
 <div class="starter-template">
 <main role="main" class="container-fluid">
     <Nav/>
-    <DateList dateSetHandler={setDate} />
+    <Router>
+    <DateList/>
     <div class="row">
         <div class="col text-center d-flex justify-content-center">
-            <GameList selectedDate={selectedDate} gameSelected={gameSelected}/>
+            <GameList/>
         </div>
     </div>
-    {#if selectedTab !== ""}
-        <GameTabs tabSelectedHandler={tabSelected} selectedTab={selectedTab} gameId={currentGameId}/>
-    {/if}
-    {#if boxScore !== ""}
-        <GameSummary boxScore={boxScore}/>
-    {/if}
-    {#if selectedTab === "plusMinus"}
-    <div class="row">
-        <div class="col">
-            <DifferentialGraph data={differentialData}/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <TeamLineups title="Plus/Minus by Lineup" data={lineupGraphData} textListName="labels" hoverListName="summary"/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <PlayerLineupGraph data={awayPlayersLineupGraphData}/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <PlayerLineupGraph data={homePlayersLineupGraphData}/>
-        </div>
-    </div>
-    {/if}
-    {#if selectedTab === "ratings"}
-        <div class="row">
-            <div class="col">
-                <TeamLineups title="Offensive Rating by Lineup" data={lineupGraphData} textListName="ortg" hoverListName="ortgExplained" alphaColorListName="ortgAlphaColor" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <TeamLineups title="Defensive Rating by Lineup" data={lineupGraphData} textListName="drtg" hoverListName="drtgExplained"  alphaColorListName="drtgAlphaColor"/>
-            </div>
-        </div>
-    {/if}
+        <Route path="game/:gameId/*">
+            <GameLoader/>
 
-    {#if selectedTab === "rebounding"}
+
+        <GameTabs/>
+        <GameSummary boxScore={$boxScore}/>
+
+        <Route path="plus-minus">
+
     <div class="row">
         <div class="col">
-            <TeamLineups title="OREB% by Lineup" data={lineupGraphData} textListName="offensiveReboundPercentage" hoverListName="offensiveReboundPercentageExplained"  alphaColorListName="offensiveReboundAlphaColor"/>
+            <DifferentialGraph data={$differentialData}/>
         </div>
     </div>
     <div class="row">
         <div class="col">
-            <TeamLineups   title="DREB% by Lineup" data={lineupGraphData} textListName="defensiveReboundPercentage" hoverListName="defensiveReboundPercentageExplained"  alphaColorListName="defensiveReboundAlphaColor"/>
+            <TeamLineups title="Plus/Minus by Lineup" data={$lineupGraphData} textListName="labels" hoverListName="summary"/>
         </div>
     </div>
-    {/if}
-    {#if selectedTab === "usage"}
+    <div class="row">
+        <div class="col">
+            <PlayerLineupGraph data={$awayPlayersLineupGraphData}/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <PlayerLineupGraph data={$homePlayersLineupGraphData}/>
+        </div>
+    </div>
+        </Route>
+        <Route path="ratings">
         <div class="row">
             <div class="col">
-                <LineupUsageGraph data={awayPlayersLineupGraphData}/>
+                <TeamLineups title="Offensive Rating by Lineup" data={$lineupGraphData} textListName="ortg" hoverListName="ortgExplained" alphaColorListName="ortgAlphaColor" />
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <LineupUsageGraph data={homePlayersLineupGraphData}/>
+                <TeamLineups title="Defensive Rating by Lineup" data={$lineupGraphData} textListName="drtg" hoverListName="drtgExplained"  alphaColorListName="drtgAlphaColor"/>
             </div>
         </div>
-    {/if}
-    {#if selectedTab === "scoring"}
+        </Route>
+
+        <Route path="rebounding">
+    <div class="row">
+        <div class="col">
+            <TeamLineups title="OREB% by Lineup" data={$lineupGraphData} textListName="offensiveReboundPercentage" hoverListName="offensiveReboundPercentageExplained"  alphaColorListName="offensiveReboundAlphaColor"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <TeamLineups   title="DREB% by Lineup" data={$lineupGraphData} textListName="defensiveReboundPercentage" hoverListName="defensiveReboundPercentageExplained"  alphaColorListName="defensiveReboundAlphaColor"/>
+        </div>
+    </div>
+        </Route>
+        <Route path="usage">
+        <div class="row">
+            <div class="col">
+                <LineupUsageGraph data={$awayPlayersLineupGraphData}/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <LineupUsageGraph data={$homePlayersLineupGraphData}/>
+            </div>
+        </div>
+        </Route>
+        <Route path="scoring">
+
         <div class="row">
             <div class="col">
                 <div class="row">
                     <div class="col">
-                        <TeamComparisonByPeriodGraph data={teamPointsInThePaintGraphData}/>
+                        <TeamComparisonByPeriodGraph data={$teamPointsInThePaintGraphData}/>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <TeamComparisonByPeriodGraph data={teamFastBreakPointsGraphData}/>
+                        <TeamComparisonByPeriodGraph data={$teamFastBreakPointsGraphData}/>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <TeamComparisonByPeriodGraph data={teamPointsOffTurnoversGraphData}/>
+                        <TeamComparisonByPeriodGraph data={$teamPointsOffTurnoversGraphData}/>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <TeamShotDistanceGraph data={awayTeamShotDistanceData}/>
+                    <TeamShotDistanceGraph data={$awayTeamShotDistanceData}/>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <TeamShotDistanceGraph data={homeTeamShotDistanceData}/>
+                    <TeamShotDistanceGraph data={$homeTeamShotDistanceData}/>
                 </div>
             </div>
         </div>
-    {/if}
-    {#if selectedTab === "player-charts"}
+        </Route>
+
+        <Route path="player-charts">
     <div class="row">
         <div class="col">
-            <TeamInfo team={boxScore.awayTeam}/>
-            <PlayerList players={awayPlayers} playerSelected={playerSelected}/>
+            <TeamInfo team={$boxScore.awayTeam}/>
+            <PlayerList players={$awayPlayers}/>
         </div>
         <div class="col">
-            <TeamInfo team={boxScore.homeTeam}/>
-            <PlayerList players={homePlayers} playerSelected={playerSelected}/>
+            <TeamInfo team={$boxScore.homeTeam}/>
+            <PlayerList players={$homePlayers}/>
         </div>
      </div>
     <div class="row">
         <div class="col">
-            <PlayerGameDetail player={currentPlayer.player}/>
+            <PlayerGameDetail player={$player}/>
         </div>
     </div>
     <div class="row">
         <div class="col">
-            <PlayerPeriodBarCharts data={periodBarChartsGraphData}/>
+            <PlayerPeriodBarCharts data={$periodBarChartsGraphData}/>
         </div>
     </div>
     <div class="row">
         <div class="col">
-            <AssistDistributionGraph data={assistDistributionGraphData}/>
+            <AssistDistributionGraph data={$assistDistributionGraphData}/>
         </div>
     </div>
     <div class="row">
         <div class="col">
-            <TeamShotDistanceGraph data={playerShotDistanceData}/>
+            <TeamShotDistanceGraph data={$playerShotDistanceData}/>
         </div>
     </div>
-    {/if}
-    {#if selectedTab === "box-score"}
+        </Route>
+        <Route path="box-score">
         <div class="row">
             <div class="col">
-                <BoxScore boxScore={boxScore}/>
+                <BoxScore boxScore={$boxScore}/>
             </div>
         </div>
-    {/if}
-    {#if selectedTab === "timeout-analysis"}
+        </Route>
+        <Route path="timeout-analysis">
+
         <div class="row">
             <div class="col">
-                <TimeoutAnalysis timeoutAnalysis={timeoutAnalysis} boxScore={boxScore}/>
+                <TimeoutAnalysis timeoutAnalysis={$timeoutAnalysis} boxScore={$boxScore}/>
             </div>
         </div>
-    {/if}
+        </Route>
+        </Route>
+    </Router>
 </main>
 </div>

@@ -3,7 +3,7 @@
     import {onMount, afterUpdate} from "svelte";
     import {chartConfig, layoutConfig} from "./plotly";
 
-    export let data, textListName, hoverListName, title, alphaColorListName;
+    export let data, textListName, hoverListName, title, alphaColorListName = undefined;
     let container;
 
     function showLineupGraph(lineups, box, lineupIntervals, lineupIntervalsText) {

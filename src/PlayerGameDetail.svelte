@@ -15,15 +15,15 @@
         text-align: center;
     }
 </style>
-{#if player}
-    <h4>{player.name}</h4>
+{#if player && player.player}
+    <h4>{player.player.name}</h4>
     <div class="headshot">
-    <img class="headshot" src={`https://cdn.nba.com/headshots/nba/latest/1040x760/${player.personId}.png`}/>
+    <img class="headshot" src={`https://cdn.nba.com/headshots/nba/latest/1040x760/${player.player.personId}.png`}/>
     </div>
     <table class="table ">
         <BoxScoreHeaderRow/>
         <tbody>
-            <BoxScorePlayerRow player={player}/>
+            <BoxScorePlayerRow player={player.player}/>
         </tbody>
     </table>
 {/if}

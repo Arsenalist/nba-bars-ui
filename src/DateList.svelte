@@ -1,19 +1,38 @@
 <script>
     import {onMount} from "svelte";
     import dayjs from "dayjs";
+    import x from 'dayjs/plugin/utc';
+    dayjs.extend(x)
+
+    import {selectedDate} from "./stores/ui-elements";
+    import {boxScore} from "./stores/singe-game";
+
     let dates = [];
 
-    export let dateSetHandler;
-    function getDatesToDisplay() {
+    function getDefaultDatesToDisplay() {
         const dates = [];
-        for (let i = 0; i != 10; i++) {
+        for (let i = 0; i !== 10; i++) {
             dates.push(dayjs().subtract(i, 'day'))
         }
         return dates.reverse();
     }
 
+    function setDefaultDateIfNoneExists() {
+        if ($boxScore && !$selectedDate) {
+            const utc = dayjs.utc(boxScore.gameTimeUTC);
+            selectedDate.set(utc.format('YYYY-MM-DD'));
+        } else if (!$boxScore && !$selectedDate) {
+            selectedDate.set(dayjs().format('YYYY-MM-DD'));
+        }
+    }
+
+    function dateSetHandler(date) {
+        selectedDate.set(date);
+    }
+
     onMount(async () => {
-        dates = getDatesToDisplay();
+        setDefaultDateIfNoneExists();
+        dates = getDefaultDatesToDisplay();
     });
 </script>
 <div class="row">
