@@ -6,11 +6,7 @@
     import {selectedDate} from "./stores/ui-elements";
 
     function getGamesIfSelectedDateIsAvailable(date) {
-        if (date !== undefined) {
-            return getGames(date);
-        } else {
-            return [];
-        }
+        return date !== undefined ? getGames(date) : [];
     }
 
 
