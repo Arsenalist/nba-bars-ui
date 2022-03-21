@@ -1,8 +1,20 @@
 <script>
     import {onMount} from "svelte";
     import { Link } from "svelte-navigator";
+    import { gameData } from './stores/singe-game';
     export let selectedDate;
-    export let gameSelected;
+    const endpoint = "NBA_API_ENDPOINT";
+
+    async function getNbaBars(gameId) {
+        const res = await fetch(`${endpoint}/bars/${gameId}`);
+        if (res.ok) {
+            if (res.ok) {
+                return await res.json();
+            } else {
+                throw new Error("problem");
+            }
+        }
+    }
 
     async function getGames(date) {
         if (date) {
@@ -21,8 +33,8 @@
         promise = getGames(selectedDate)
     }
 
-    function sendGameEvent(gameId) {
-        gameSelected(gameId);
+    async function sendGameEvent(gameId) {
+        gameData.set(await getNbaBars(gameId));
     }
 
     onMount(async () => {

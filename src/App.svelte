@@ -1,5 +1,6 @@
 <script lang="ts">
     import Nav from "./Nav.svelte";
+    import { gameData } from './stores/singe-game';
     import { Router, Link, Route } from "svelte-navigator";
 
     const endpoint = "NBA_API_ENDPOINT";
@@ -16,26 +17,27 @@
         teamPointsOffTurnoversGraphData, timeoutAnalysis;
     let selectedTab = "game-charts";
 
-    async function gameSelected(gameId) {
-        clearGraphs();
-        currentGameId = gameId;
-        promise = await getNbaBars(gameId);
-        selectedTab = "plusMinus";
-        awayPlayers = promise.awayTeam.players;
-        homePlayers = promise.homeTeam.players;
-        boxScore = promise.boxScore;
-        lineupGraphData = {
-            lineups: promise.lineups,
-            boxScore: promise.boxScore,
-            lineupIntervals: promise.lineupIntervals,
-            lineupIntervalsText: promise.lineupIntervalsText
-        }
-        awayPlayersLineupGraphData = {
-            playerLineups: promise.awayPlayerLineups,
-            team: promise.boxScore.awayTeam,
-            lineupIntervals: promise.lineupIntervals,
-            lineupIntervalsText: promise.lineupIntervalsText
-        }
+        gameData.subscribe(value => {
+            if (value === undefined) return;
+            clearGraphs();
+            promise = value;
+
+            selectedTab = "plusMinus";
+            awayPlayers = promise.awayTeam.players;
+            homePlayers = promise.homeTeam.players;
+            boxScore = promise.boxScore;
+            lineupGraphData = {
+                lineups: promise.lineups,
+                boxScore: promise.boxScore,
+                lineupIntervals: promise.lineupIntervals,
+                lineupIntervalsText: promise.lineupIntervalsText
+            }
+            awayPlayersLineupGraphData = {
+                playerLineups: promise.awayPlayerLineups,
+                team: promise.boxScore.awayTeam,
+                lineupIntervals: promise.lineupIntervals,
+                lineupIntervalsText: promise.lineupIntervalsText
+            }
 
         homePlayersLineupGraphData = {
             playerLineups: promise.homePlayerLineups,
@@ -96,7 +98,7 @@
         }
 
         timeoutAnalysis = promise.timeoutAnalysis;
-    }
+    });
 
     async function playerSelected(personId) {
         const player = awayPlayers.concat(homePlayers).find(p => p.player.personId === personId);
@@ -173,13 +175,13 @@
     <DateList dateSetHandler={setDate} />
     <div class="row">
         <div class="col text-center d-flex justify-content-center">
-            <GameList selectedDate={selectedDate} gameSelected={gameSelected}/>
+            <GameList selectedDate={selectedDate}/>
         </div>
     </div>
         <Route path="game/:gameId/*">
 
 
-    {#if selectedTab !== ""}
+    {#if promise !== undefined}
         <GameTabs tabSelectedHandler={tabSelected} selectedTab={selectedTab} gameId={currentGameId}/>
     {/if}
     {#if boxScore !== ""}

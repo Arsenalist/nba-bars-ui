@@ -1,6 +1,5 @@
 <script>
     import { Link } from "svelte-navigator";
-    export let gameId;
     export let tabSelectedHandler;
     export let selectedTab;
     function onTabClick(e) {
@@ -10,7 +9,6 @@
     }
 
 </script>
-{#if gameId}
     <div class="row">
         <div class="col">
             <ul class="nav nav-tabs">
@@ -73,4 +71,3 @@
             </ul>
         </div>
     </div>
-{/if}
