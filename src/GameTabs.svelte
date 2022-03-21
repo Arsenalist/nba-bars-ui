@@ -10,9 +10,9 @@
         <div class="col">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <Link to="plusMinus">
-                    <span class="nav-link" aria-current="page" href="#"  data-tab-name="plusMinus"
-                       class:active="{$selectedTab === 'plusMinus'}"
+                    <Link to="plus-minus">
+                    <span class="nav-link" aria-current="page" href="#"  data-tab-name="plus-minus"
+                       class:active="{$selectedTab === 'plus-minus'}"
                        on:click={onTabClick}>Plus/Minus</span>
                     </Link>
                 </li>

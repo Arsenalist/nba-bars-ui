@@ -57,7 +57,7 @@
         <GameTabs/>
         <GameSummary boxScore={$boxScore}/>
 
-        <Route path="plusMinus">
+        <Route path="plus-minus">
 
     <div class="row">
         <div class="col">
