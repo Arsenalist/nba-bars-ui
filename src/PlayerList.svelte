@@ -1,6 +1,11 @@
 <script>
-    export let players;
-    export let playerSelected;
+     import {awayPlayers, homePlayers, player} from "./stores/singe-game";
+     export let players;
+
+     function playerSelected(personId) {
+          const selectedPlayer = $awayPlayers.concat($homePlayers).find(p => p.player.personId === personId);
+          player.set(selectedPlayer);
+     }
 </script>
 <div>
 {#if players.length}

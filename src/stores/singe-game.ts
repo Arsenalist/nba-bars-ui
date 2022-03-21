@@ -1,6 +1,7 @@
 import {writable, derived} from 'svelte/store';
 
 export const gameData = writable();
+export const player = writable();
 
 export const awayPlayers = derived(gameData, ($gameData: any) => $gameData !== undefined ? $gameData.awayTeam.players : undefined);
 export const homePlayers = derived(gameData, ($gameData: any) => $gameData !== undefined ? $gameData.homeTeam.players : undefined);
@@ -115,4 +116,34 @@ export const timeoutAnalysis = derived(gameData, ($gameData: any) =>  {
 export const boxScore = derived(gameData, ($gameData: any) =>  {
     if ($gameData === undefined) return undefined;
     return $gameData.boxScore;
+});
+
+export const periodBarChartsGraphData = derived([gameData, player], ([$gameData, $player]: any[]) =>  {
+    console.log("period bar chart: ", $gameData, $player);
+    if ($gameData === undefined || $player === undefined) return undefined;
+    return {
+        chartLabels: $gameData.chartLabels,
+        lineupIntervalsText: $gameData.lineupIntervalsText,
+        player: $player
+    }
+});
+
+export const assistDistributionGraphData = derived([gameData, player], ([$gameData, $player]: any[]) =>  {
+    if ($gameData === undefined || $player === undefined) return undefined;
+    return {
+        player: $player.player,
+        allAssistDistributions: $gameData.awayTeam.assistDistribution.concat($gameData.homeTeam.assistDistribution)
+    }
+});
+
+export const playerShotDistanceData = derived([gameData, player], ([$gameData, $player]: any[]) =>  {
+    if ($gameData === undefined || $player === undefined) return undefined;
+    const allShots = $gameData.awayTeam.shotDistance.concat($gameData.homeTeam.shotDistance);
+    return {
+        lineupIntervals: $gameData.lineupIntervals,
+        lineupIntervalsText: $gameData.lineupIntervalsText,
+        made: allShots.filter(sd => sd.action.shotResult === "Made" && sd.action.personId === $player.player.personId),
+        missed: allShots.filter(sd => sd.action.shotResult === "Missed" && sd.action.personId === $player.player.personId),
+        title: `Shot Distance`
+    }
 });

@@ -2,15 +2,14 @@
     import Nav from "./Nav.svelte";
     import { gameData, awayPlayers, homePlayers, lineupGraphData, awayPlayersLineupGraphData, homePlayersLineupGraphData, differentialData,
         awayTeamShotDistanceData, homeTeamShotDistanceData, teamPointsInThePaintGraphData, teamPointsInThePaintGraphData,
-        teamFastBreakPointsGraphData, teamPointsOffTurnoversGraphData, timeoutAnalysis, boxScore} from './stores/singe-game';
+        teamFastBreakPointsGraphData, teamPointsOffTurnoversGraphData, timeoutAnalysis, boxScore,
+        periodBarChartsGraphData, assistDistributionGraphData, playerShotDistanceData, player} from './stores/singe-game';
     import { Router, Link, Route } from "svelte-navigator";
 
     const endpoint = "NBA_API_ENDPOINT";
 
     let promise;
-    let currentPlayer = {};
     let currentGameId = undefined;
-    let assistDistributionGraphData, periodBarChartsGraphData, playerShotDistanceData;
     let selectedTab = "game-charts";
 
         gameData.subscribe(value => {
@@ -20,29 +19,6 @@
 
             selectedTab = "plusMinus";
     });
-
-    async function playerSelected(personId) {
-        const player = $awayPlayers.concat($homePlayers).find(p => p.player.personId === personId);
-        currentPlayer = player;
-        periodBarChartsGraphData = {
-            chartLabels: promise.chartLabels,
-            lineupIntervalsText: promise.lineupIntervalsText,
-            player: player
-        }
-        assistDistributionGraphData = {
-            player: player.player,
-            allAssistDistributions: promise.awayTeam.assistDistribution.concat(promise.homeTeam.assistDistribution)
-        }
-
-        const allShots = promise.awayTeam.shotDistance.concat(promise.homeTeam.shotDistance);
-        playerShotDistanceData = {
-            lineupIntervals: promise.lineupIntervals,
-            lineupIntervalsText: promise.lineupIntervalsText,
-            made: allShots.filter(sd => sd.action.shotResult === "Made" && sd.action.personId === player.player.personId),
-            missed: allShots.filter(sd => sd.action.shotResult === "Missed" && sd.action.personId === player.player.personId),
-            title: `Shot Distance`
-        }
-    }
 
     let selectedDate;
 
@@ -192,27 +168,27 @@
         <Route path="player-charts">
     <div class="row">
         <div class="col">
-            <TeamInfo team={boxScore.awayTeam}/>
-            <PlayerList players={$awayPlayers} playerSelected={playerSelected}/>
+            <TeamInfo team={$boxScore.awayTeam}/>
+            <PlayerList players={$awayPlayers}/>
         </div>
         <div class="col">
-            <TeamInfo team={boxScore.homeTeam}/>
-            <PlayerList players={$homePlayers} playerSelected={playerSelected}/>
+            <TeamInfo team={$boxScore.homeTeam}/>
+            <PlayerList players={$homePlayers}/>
         </div>
      </div>
     <div class="row">
         <div class="col">
-            <PlayerGameDetail player={currentPlayer.player}/>
+            <PlayerGameDetail player={$player !== undefined ? $player.player : undefined}/>
         </div>
     </div>
     <div class="row">
         <div class="col">
-            <PlayerPeriodBarCharts data={periodBarChartsGraphData}/>
+            <PlayerPeriodBarCharts data={$periodBarChartsGraphData}/>
         </div>
     </div>
     <div class="row">
         <div class="col">
-            <AssistDistributionGraph data={assistDistributionGraphData}/>
+            <AssistDistributionGraph data={$assistDistributionGraphData}/>
         </div>
     </div>
     <div class="row">
