@@ -41,7 +41,7 @@
 
 </script>
 <div class="starter-template">
-<main role="main" class="container-fluid">
+<main class="container-fluid">
     <Nav/>
     <Router>
     <DateList/>

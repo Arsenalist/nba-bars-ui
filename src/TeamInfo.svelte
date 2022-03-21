@@ -2,7 +2,7 @@
     export let team;
 </script>
 <style>
-    h3 {
+    h5 {
         text-align: center;
     }
 </style>

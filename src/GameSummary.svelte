@@ -23,7 +23,7 @@
         <h3>{boxScore.homeTeam.score}</h3>
     </div>
     <div class="col-md-1 d-none d-sm-block">
-        <img src={`https://cdn.nba.com/logos/nba/${boxScore.homeTeam.teamId}/global/L/logo.svg`}/>
+        <img alt={boxScore.homeTeam.teamName}  src={`https://cdn.nba.com/logos/nba/${boxScore.homeTeam.teamId}/global/L/logo.svg`}/>
     </div>
     <div class="col-md-1 col-sm-3">
         <h3>{boxScore.homeTeam.teamName}</h3>
