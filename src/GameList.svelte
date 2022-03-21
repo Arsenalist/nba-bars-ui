@@ -1,6 +1,6 @@
 <script>
     import {onMount} from "svelte";
-
+    import { Link } from "svelte-navigator";
     export let selectedDate;
     export let gameSelected;
 
@@ -33,11 +33,13 @@
     {#if games}
 <div class="btn-group game-list">
     {#each games as {boxscore, awayTeam, homeTeam, profile}}
+            <Link to={`game/${profile.gameId}/plusMinus`}>
             <button type="button" class="text-nowrap btn btn-outline-primary"  on:click={e => sendGameEvent(profile.gameId)}>
                     <div>{awayTeam.profile.name}  {#if boxscore.status != "1"} {boxscore.awayScore} {/if}</div>
                     <div>{homeTeam.profile.name} {#if boxscore.status != "1"}{boxscore.homeScore}{/if}</div>
                     <div>{boxscore.periodClock} {boxscore.statusDesc}</div>
             </button>
+            </Link>
 
     {/each}
 </div>

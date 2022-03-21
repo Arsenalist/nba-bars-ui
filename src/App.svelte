@@ -1,5 +1,6 @@
 <script lang="ts">
     import Nav from "./Nav.svelte";
+    import { Router, Link, Route } from "svelte-navigator";
 
     const endpoint = "NBA_API_ENDPOINT";
 
@@ -168,19 +169,25 @@
 <div class="starter-template">
 <main role="main" class="container-fluid">
     <Nav/>
+    <Router>
     <DateList dateSetHandler={setDate} />
     <div class="row">
         <div class="col text-center d-flex justify-content-center">
             <GameList selectedDate={selectedDate} gameSelected={gameSelected}/>
         </div>
     </div>
+        <Route path="game/:gameId/*">
+
+
     {#if selectedTab !== ""}
         <GameTabs tabSelectedHandler={tabSelected} selectedTab={selectedTab} gameId={currentGameId}/>
     {/if}
     {#if boxScore !== ""}
         <GameSummary boxScore={boxScore}/>
     {/if}
-    {#if selectedTab === "plusMinus"}
+
+        <Route path="plusMinus">
+
     <div class="row">
         <div class="col">
             <DifferentialGraph data={differentialData}/>
@@ -201,8 +208,8 @@
             <PlayerLineupGraph data={homePlayersLineupGraphData}/>
         </div>
     </div>
-    {/if}
-    {#if selectedTab === "ratings"}
+        </Route>
+        <Route path="ratings">
         <div class="row">
             <div class="col">
                 <TeamLineups title="Offensive Rating by Lineup" data={lineupGraphData} textListName="ortg" hoverListName="ortgExplained" alphaColorListName="ortgAlphaColor" />
@@ -213,9 +220,9 @@
                 <TeamLineups title="Defensive Rating by Lineup" data={lineupGraphData} textListName="drtg" hoverListName="drtgExplained"  alphaColorListName="drtgAlphaColor"/>
             </div>
         </div>
-    {/if}
+        </Route>
 
-    {#if selectedTab === "rebounding"}
+        <Route path="rebounding">
     <div class="row">
         <div class="col">
             <TeamLineups title="OREB% by Lineup" data={lineupGraphData} textListName="offensiveReboundPercentage" hoverListName="offensiveReboundPercentageExplained"  alphaColorListName="offensiveReboundAlphaColor"/>
@@ -226,8 +233,8 @@
             <TeamLineups   title="DREB% by Lineup" data={lineupGraphData} textListName="defensiveReboundPercentage" hoverListName="defensiveReboundPercentageExplained"  alphaColorListName="defensiveReboundAlphaColor"/>
         </div>
     </div>
-    {/if}
-    {#if selectedTab === "usage"}
+        </Route>
+        <Route path="usage">
         <div class="row">
             <div class="col">
                 <LineupUsageGraph data={awayPlayersLineupGraphData}/>
@@ -238,8 +245,9 @@
                 <LineupUsageGraph data={homePlayersLineupGraphData}/>
             </div>
         </div>
-    {/if}
-    {#if selectedTab === "scoring"}
+        </Route>
+        <Route path="scoring">
+
         <div class="row">
             <div class="col">
                 <div class="row">
@@ -269,8 +277,9 @@
                 </div>
             </div>
         </div>
-    {/if}
-    {#if selectedTab === "player-charts"}
+        </Route>
+
+        <Route path="player-charts">
     <div class="row">
         <div class="col">
             <TeamInfo team={boxScore.awayTeam}/>
@@ -301,20 +310,23 @@
             <TeamShotDistanceGraph data={playerShotDistanceData}/>
         </div>
     </div>
-    {/if}
-    {#if selectedTab === "box-score"}
+        </Route>
+        <Route path="box-score">
         <div class="row">
             <div class="col">
                 <BoxScore boxScore={boxScore}/>
             </div>
         </div>
-    {/if}
-    {#if selectedTab === "timeout-analysis"}
+        </Route>
+        <Route path="timeout-analysis">
+
         <div class="row">
             <div class="col">
                 <TimeoutAnalysis timeoutAnalysis={timeoutAnalysis} boxScore={boxScore}/>
             </div>
         </div>
-    {/if}
+        </Route>
+        </Route>
+    </Router>
 </main>
 </div>

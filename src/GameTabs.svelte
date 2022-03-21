@@ -1,4 +1,5 @@
 <script>
+    import { Link } from "svelte-navigator";
     export let gameId;
     export let tabSelectedHandler;
     export let selectedTab;
@@ -14,44 +15,60 @@
         <div class="col">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="#"  data-tab-name="plusMinus"
+                    <Link to="plusMinus">
+                    <span class="nav-link" aria-current="page" href="#"  data-tab-name="plusMinus"
                        class:active="{selectedTab === 'plusMinus'}"
-                       on:click={onTabClick}>Plus/Minus</a>
+                       on:click={onTabClick}>Plus/Minus</span>
+                    </Link>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="#"  data-tab-name="rebounding"
+                    <Link to="rebounding">
+                    <span class="nav-link" aria-current="page" href="#"  data-tab-name="rebounding"
                        class:active="{selectedTab === 'rebounding'}"
-                       on:click={onTabClick}>Rebounding</a>
+                       on:click={onTabClick}>Rebounding</span>
+                    </Link>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="#"  data-tab-name="ratings"
+                    <Link to="ratings">
+                    <span class="nav-link" aria-current="page" href="#"  data-tab-name="ratings"
                        class:active="{selectedTab === 'ratings'}"
-                       on:click={onTabClick}>Ratings</a>
+                       on:click={onTabClick}>Ratings</span>
+                    </Link>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="#"  data-tab-name="usage"
+                    <Link to="usage">
+                    <span class="nav-link" aria-current="page" href="#"  data-tab-name="usage"
                        class:active="{selectedTab === 'usage'}"
-                       on:click={onTabClick}>Usage</a>
+                       on:click={onTabClick}>Usage</span>
+                    </Link>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="#"  data-tab-name="scoring"
+                    <Link to="scoring">
+                    <span class="nav-link" aria-current="page" href="#"  data-tab-name="scoring"
                        class:active="{selectedTab === 'scoring'}"
-                       on:click={onTabClick}>Scoring</a>
+                       on:click={onTabClick}>Scoring</span>
+                    </Link>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="#" data-tab-name="player-charts"
+                    <Link to="player-charts">
+                    <span class="nav-link" aria-current="page" href="#" data-tab-name="player-charts"
                        class:active="{selectedTab === 'player-charts'}"
-                       on:click={onTabClick}>Player Charts</a>
+                       on:click={onTabClick}>Player Charts</span>
+                    </Link>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="#" data-tab-name="box-score"
+                    <Link to="box-score">
+                    <span class="nav-link" aria-current="page" href="#" data-tab-name="box-score"
                        class:active="{selectedTab === 'box-score'}"
-                       on:click={onTabClick}>Box Score</a>
+                       on:click={onTabClick}>Box Score</span>
+                    </Link>
                 </li>
                 <li class="nav-item">
+                    <Link to="timeout-analysis">
                     <a class="nav-link" aria-current="page" href="#" data-tab-name="timeout-analysis"
                        class:active="{selectedTab === 'timeout-analysis'}"
                        on:click={onTabClick}>Timeout Analysis</a>
+                    </Link>
                 </li>
             </ul>
         </div>
