@@ -1,7 +1,6 @@
 <script lang="ts">
     import Nav from "./Nav.svelte";
     import {
-        gameData,
         awayPlayers,
         homePlayers,
         lineupGraphData,
@@ -21,20 +20,6 @@
         player
     } from './stores/singe-game';
     import {Router, Route} from "svelte-navigator";
-
-    let promise;
-    let currentGameId = undefined;
-    gameData.subscribe(value => {
-        if (value === undefined) return;
-        promise = value;
-    });
-
-    let selectedDate;
-
-    async function setDate(d) {
-        selectedDate = d;
-    }
-
     import GameList from "./GameList.svelte";
     import TeamInfo from "./TeamInfo.svelte";
     import PlayerGameDetail from "./PlayerGameDetail.svelte";
@@ -59,19 +44,17 @@
 <main role="main" class="container-fluid">
     <Nav/>
     <Router>
-    <DateList dateSetHandler={setDate} />
+    <DateList/>
     <div class="row">
         <div class="col text-center d-flex justify-content-center">
-            <GameList selectedDate={selectedDate}/>
+            <GameList/>
         </div>
     </div>
         <Route path="game/:gameId/*">
             <GameLoader/>
 
 
-    {#if promise !== undefined}
-        <GameTabs gameId={currentGameId}/>
-    {/if}
+        <GameTabs/>
         <GameSummary boxScore={$boxScore}/>
 
         <Route path="plusMinus">

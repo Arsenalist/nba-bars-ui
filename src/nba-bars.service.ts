@@ -10,3 +10,12 @@ export async function getNbaBars(gameId) {
         }
     }
 }
+
+export async function getGames(date) {
+    const res = await fetch(`${endpoint}/games/${date}`)
+    if (res.ok) {
+        return await res.json();
+    } else {
+        throw new Error("problem");
+    }
+}

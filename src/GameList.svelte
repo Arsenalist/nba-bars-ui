@@ -2,24 +2,21 @@
     import {onMount} from "svelte";
     import { Link } from "svelte-navigator";
     import { gameData } from './stores/singe-game';
-    import {getNbaBars} from "./nba-bars.service";
-    export let selectedDate;
+    import {getGames, getNbaBars} from "./nba-bars.service";
+    import {selectedDate} from "./stores/ui-elements";
 
-    async function getGames(date) {
-        if (date) {
-            const endpoint = "NBA_API_ENDPOINT";
-            const res = await fetch(`${endpoint}/games/${date}`)
-            if (res.ok) {
-                return await res.json();
-            } else {
-                throw new Error("problem");
-            }
+    function getGamesIfSelectedDateIsAvailable(date) {
+        if (date !== undefined) {
+            return getGames(date);
+        } else {
+            return [];
         }
     }
 
+
     let promise;
     $:  {
-        promise = getGames(selectedDate)
+        promise = getGamesIfSelectedDateIsAvailable($selectedDate);
     }
 
     async function sendGameEvent(gameId) {
@@ -27,7 +24,7 @@
     }
 
     onMount(async () => {
-        promise = getGames(selectedDate)
+        promise = getGamesIfSelectedDateIsAvailable($selectedDate);
     });
 </script>
 {#await promise then games}

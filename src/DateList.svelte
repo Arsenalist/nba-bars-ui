@@ -1,15 +1,18 @@
 <script>
     import {onMount} from "svelte";
     import dayjs from "dayjs";
+    import {selectedDate} from "./stores/ui-elements";
     let dates = [];
-
-    export let dateSetHandler;
     function getDatesToDisplay() {
         const dates = [];
         for (let i = 0; i != 10; i++) {
             dates.push(dayjs().subtract(i, 'day'))
         }
         return dates.reverse();
+    }
+
+    function dateSetHandler(date) {
+        selectedDate.set(date);
     }
 
     onMount(async () => {
