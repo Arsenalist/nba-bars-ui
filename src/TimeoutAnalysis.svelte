@@ -18,7 +18,7 @@
             <tr>
                 <td>
                     {#if t.timeoutAction.teamId}
-                        <img style="width: 20px" src={`https://cdn.nba.com/logos/nba/${t.timeoutAction.teamId}/global/L/logo.svg`}/>
+                        <img alt={t.timeoutAction.teamTricode} style="width: 20px" src={`https://cdn.nba.com/logos/nba/${t.timeoutAction.teamId}/global/L/logo.svg`}/>
                     {/if}
                     {t.timeoutAction.clock}, {t.timeoutAction.description}
                 </td>

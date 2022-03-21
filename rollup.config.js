@@ -66,7 +66,8 @@ export default {
 			inlineSources: !production
 		}),
 		replace({
-			'NBA_API_ENDPOINT': production ? 'https://nbaapi.raptorsrepublic.com' : 'http://localhost:3000'
+			'NBA_API_ENDPOINT': production ? 'https://nbaapi.raptorsrepublic.com' : 'http://localhost:3000',
+			preventAssignment: true
 		}),
 
 		// In dev mode, call `npm run start` once

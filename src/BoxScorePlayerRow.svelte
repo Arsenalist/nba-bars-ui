@@ -1,6 +1,11 @@
 <script>
     export let player;
 </script>
+<style>
+    td {
+        text-align: center;
+    }
+</style>
 {#if player}
 <tr>
     <td>{player.name}</td>

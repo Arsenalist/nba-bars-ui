@@ -1,3 +1,8 @@
+<style>
+    th {
+        text-align: center;
+    }
+</style>
 <thead>
 <tr>
     <th>Name</th>

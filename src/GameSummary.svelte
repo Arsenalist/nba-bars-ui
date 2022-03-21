@@ -10,7 +10,7 @@
         <h3>{boxScore.awayTeam.teamName}</h3>
     </div>
     <div class="col-md-1 d-none d-sm-block">
-        <img src={`https://cdn.nba.com/logos/nba/${boxScore.awayTeam.teamId}/global/L/logo.svg`}/>
+        <img alt={boxScore.awayTeam.teamName} src={`https://cdn.nba.com/logos/nba/${boxScore.awayTeam.teamId}/global/L/logo.svg`}/>
     </div>
     <div class="col-md-1 col-sm-3">
         <h3>{boxScore.awayTeam.score}</h3>

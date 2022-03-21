@@ -5,7 +5,7 @@
     export let player;
 </script>
 <style>
-    table td, table th, h4 {
+    h4 {
         text-align: center;
     }
     div.headshot img {
@@ -18,7 +18,7 @@
 {#if player && player.player}
     <h4>{player.player.name}</h4>
     <div class="headshot">
-    <img class="headshot" src={`https://cdn.nba.com/headshots/nba/latest/1040x760/${player.player.personId}.png`}/>
+    <img alt={`${player.player.name} Headshot`} class="headshot" src={`https://cdn.nba.com/headshots/nba/latest/1040x760/${player.player.personId}.png`}/>
     </div>
     <table class="table ">
         <BoxScoreHeaderRow/>
