@@ -1,13 +1,11 @@
 <script lang="ts">
     import Nav from "./Nav.svelte";
-    import { gameData } from './stores/singe-game';
+    import { gameData, awayPlayers, homePlayers} from './stores/singe-game';
     import { Router, Link, Route } from "svelte-navigator";
 
     const endpoint = "NBA_API_ENDPOINT";
 
     let promise;
-    let awayPlayers = []
-    let homePlayers = []
     let boxScore = {};
     let currentPlayer = {};
     let currentGameId = undefined;
@@ -23,8 +21,6 @@
             promise = value;
 
             selectedTab = "plusMinus";
-            awayPlayers = promise.awayTeam.players;
-            homePlayers = promise.homeTeam.players;
             boxScore = promise.boxScore;
             lineupGraphData = {
                 lineups: promise.lineups,
@@ -101,7 +97,7 @@
     });
 
     async function playerSelected(personId) {
-        const player = awayPlayers.concat(homePlayers).find(p => p.player.personId === personId);
+        const player = $awayPlayers.concat($homePlayers).find(p => p.player.personId === personId);
         currentPlayer = player;
         periodBarChartsGraphData = {
             chartLabels: promise.chartLabels,
@@ -285,11 +281,11 @@
     <div class="row">
         <div class="col">
             <TeamInfo team={boxScore.awayTeam}/>
-            <PlayerList players={awayPlayers} playerSelected={playerSelected}/>
+            <PlayerList players={$awayPlayers} playerSelected={playerSelected}/>
         </div>
         <div class="col">
             <TeamInfo team={boxScore.homeTeam}/>
-            <PlayerList players={homePlayers} playerSelected={playerSelected}/>
+            <PlayerList players={$homePlayers} playerSelected={playerSelected}/>
         </div>
      </div>
     <div class="row">
