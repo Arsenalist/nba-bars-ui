@@ -1,0 +1,5 @@
+[[redirects]]
+from = "/game/*"
+to = "https://bars.raptorsrepublic.com/game/:splat"
+status = 200
+force = true
