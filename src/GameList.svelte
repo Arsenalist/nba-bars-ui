@@ -2,19 +2,8 @@
     import {onMount} from "svelte";
     import { Link } from "svelte-navigator";
     import { gameData } from './stores/singe-game';
+    import {getNbaBars} from "./nba-bars.service";
     export let selectedDate;
-    const endpoint = "NBA_API_ENDPOINT";
-
-    async function getNbaBars(gameId) {
-        const res = await fetch(`${endpoint}/bars/${gameId}`);
-        if (res.ok) {
-            if (res.ok) {
-                return await res.json();
-            } else {
-                throw new Error("problem");
-            }
-        }
-    }
 
     async function getGames(date) {
         if (date) {

@@ -1,34 +1,38 @@
 <script lang="ts">
     import Nav from "./Nav.svelte";
-    import { gameData, awayPlayers, homePlayers, lineupGraphData, awayPlayersLineupGraphData, homePlayersLineupGraphData, differentialData,
-        awayTeamShotDistanceData, homeTeamShotDistanceData, teamPointsInThePaintGraphData, teamPointsInThePaintGraphData,
-        teamFastBreakPointsGraphData, teamPointsOffTurnoversGraphData, timeoutAnalysis, boxScore,
-        periodBarChartsGraphData, assistDistributionGraphData, playerShotDistanceData, player} from './stores/singe-game';
-    import { Router, Link, Route } from "svelte-navigator";
-
-    const endpoint = "NBA_API_ENDPOINT";
+    import {
+        gameData,
+        awayPlayers,
+        homePlayers,
+        lineupGraphData,
+        awayPlayersLineupGraphData,
+        homePlayersLineupGraphData,
+        differentialData,
+        awayTeamShotDistanceData,
+        homeTeamShotDistanceData,
+        teamPointsInThePaintGraphData,
+        teamFastBreakPointsGraphData,
+        teamPointsOffTurnoversGraphData,
+        timeoutAnalysis,
+        boxScore,
+        periodBarChartsGraphData,
+        assistDistributionGraphData,
+        playerShotDistanceData,
+        player
+    } from './stores/singe-game';
+    import {Router, Route} from "svelte-navigator";
 
     let promise;
     let currentGameId = undefined;
-    let selectedTab = "game-charts";
-
-        gameData.subscribe(value => {
-            if (value === undefined) return;
-            clearGraphs();
-            promise = value;
-
-            selectedTab = "plusMinus";
+    gameData.subscribe(value => {
+        if (value === undefined) return;
+        promise = value;
     });
 
     let selectedDate;
 
     async function setDate(d) {
-        clearGraphs();
         selectedDate = d;
-    }
-
-    function clearGraphs() {
-        selectedTab = "";
     }
 
     import GameList from "./GameList.svelte";
@@ -48,10 +52,7 @@
     import GameSummary from "./GameSummary.svelte";
     import TimeoutAnalysis from "./TimeoutAnalysis.svelte";
     import LineupUsageGraph from "./LineupUsageGraph.svelte";
-
-    function tabSelected(tab: string) {
-        selectedTab = tab;
-    }
+    import GameLoader from "./GameLoader.svelte";
 
 </script>
 <div class="starter-template">
@@ -65,10 +66,11 @@
         </div>
     </div>
         <Route path="game/:gameId/*">
+            <GameLoader/>
 
 
     {#if promise !== undefined}
-        <GameTabs tabSelectedHandler={tabSelected} selectedTab={selectedTab} gameId={currentGameId}/>
+        <GameTabs gameId={currentGameId}/>
     {/if}
         <GameSummary boxScore={$boxScore}/>
 
@@ -178,7 +180,7 @@
      </div>
     <div class="row">
         <div class="col">
-            <PlayerGameDetail player={$player !== undefined ? $player.player : undefined}/>
+            <PlayerGameDetail player={$player}/>
         </div>
     </div>
     <div class="row">

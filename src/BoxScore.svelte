@@ -4,6 +4,7 @@
 
     export let boxScore;
 </script>
+{#if boxScore}
 <div>
     <h4>{boxScore.awayTeam.teamName}</h4>
     <table class="table">
@@ -24,3 +25,4 @@
         </tbody>
     </table>
 </div>
+    {/if}

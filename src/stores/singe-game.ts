@@ -119,7 +119,6 @@ export const boxScore = derived(gameData, ($gameData: any) =>  {
 });
 
 export const periodBarChartsGraphData = derived([gameData, player], ([$gameData, $player]: any[]) =>  {
-    console.log("period bar chart: ", $gameData, $player);
     if ($gameData === undefined || $player === undefined) return undefined;
     return {
         chartLabels: $gameData.chartLabels,
