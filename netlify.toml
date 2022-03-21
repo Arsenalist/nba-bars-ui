@@ -1,5 +1,5 @@
 [[redirects]]
 from = "/game/*"
-to = "https://bars.raptorsrepublic.com/game/:splat"
+to = "https://bars.raptorsrepublic.com/blah/:splat"
 status = 200
 force = true
