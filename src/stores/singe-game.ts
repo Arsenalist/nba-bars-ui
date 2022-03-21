@@ -1,6 +1,118 @@
-import { writable, derived } from 'svelte/store';
+import {writable, derived} from 'svelte/store';
 
 export const gameData = writable();
 
-export const awayPlayers = derived(gameData, gameData => gameData !== undefined ? gameData.awayTeam.players : undefined);
-export const homePlayers = derived(gameData, gameData => gameData !== undefined ? gameData.homeTeam.players : undefined);
+export const awayPlayers = derived(gameData, ($gameData: any) => $gameData !== undefined ? $gameData.awayTeam.players : undefined);
+export const homePlayers = derived(gameData, ($gameData: any) => $gameData !== undefined ? $gameData.homeTeam.players : undefined);
+export const lineupGraphData = derived(gameData, ($gameData: any) =>  {
+    if ($gameData === undefined) return undefined;
+    return {
+        lineups: $gameData.lineups,
+        boxScore: $gameData.boxScore,
+        lineupIntervals: $gameData.lineupIntervals,
+        lineupIntervalsText: $gameData.lineupIntervalsText
+    }
+});
+
+export const awayPlayersLineupGraphData = derived(gameData, ($gameData: any) =>  {
+    if ($gameData === undefined) return undefined;
+    return {
+        playerLineups: $gameData.awayPlayerLineups,
+        team: $gameData.boxScore.awayTeam,
+        lineupIntervals: $gameData.lineupIntervals,
+        lineupIntervalsText: $gameData.lineupIntervalsText
+    }
+});
+
+export const homePlayersLineupGraphData = derived(gameData, ($gameData: any) =>  {
+    if ($gameData === undefined) return undefined;
+    return {
+        playerLineups: $gameData.homePlayerLineups,
+        team: $gameData.boxScore.homeTeam,
+        lineupIntervals: $gameData.lineupIntervals,
+        lineupIntervalsText: $gameData.lineupIntervalsText
+    }
+});
+
+export const differentialData = derived(gameData, ($gameData: any) =>  {
+    if ($gameData === undefined) return undefined;
+    return {
+        differential: $gameData.differential,
+        lineupIntervals: $gameData.lineupIntervals,
+        lineupIntervalsText: $gameData.lineupIntervalsText,
+        boxScore: $gameData.boxScore,
+    }
+});
+
+export const awayTeamShotDistanceData = derived(gameData, ($gameData: any) =>  {
+    if ($gameData === undefined) return undefined;
+    return {
+        lineupIntervals: $gameData.lineupIntervals,
+        lineupIntervalsText: $gameData.lineupIntervalsText,
+        made: $gameData.awayTeam.shotDistance.filter(sd => sd.action.shotResult === "Made"),
+        missed: $gameData.awayTeam.shotDistance.filter(sd => sd.action.shotResult === "Missed"),
+        title: `${$gameData.boxScore.awayTeam.teamName} Shot Distance`
+    }
+});
+
+export const homeTeamShotDistanceData = derived(gameData, ($gameData: any) =>  {
+    if ($gameData === undefined) return undefined;
+    return {
+        lineupIntervals: $gameData.lineupIntervals,
+        lineupIntervalsText: $gameData.lineupIntervalsText,
+        made: $gameData.homeTeam.shotDistance.filter(sd => sd.action.shotResult === "Made"),
+        missed: $gameData.homeTeam.shotDistance.filter(sd => sd.action.shotResult === "Missed"),
+        title: `${$gameData.boxScore.homeTeam.teamName} Shot Distance`
+    }
+});
+
+
+export const teamPointsInThePaintGraphData = derived(gameData, ($gameData: any) =>  {
+    if ($gameData === undefined) return undefined;
+    return {
+        boxScore: $gameData.boxScore,
+        awayData: $gameData.awayTeam.pointsInThePaint,
+        homeData: $gameData.homeTeam.pointsInThePaint,
+        title: 'Points in the Paint',
+        lineupIntervals: $gameData.lineupIntervals,
+        lineupIntervalsText: $gameData.lineupIntervalsText,
+        teamStatistic: 'pointsInThePaint'
+    }
+});
+
+
+export const teamFastBreakPointsGraphData = derived(gameData, ($gameData: any) => {
+    if ($gameData === undefined) return undefined;
+    return {
+        boxScore: $gameData.boxScore,
+        awayData: $gameData.awayTeam.pointsFastBreak,
+        homeData: $gameData.homeTeam.pointsFastBreak,
+        title: 'Fastbreak Points',
+        lineupIntervals: $gameData.lineupIntervals,
+        lineupIntervalsText: $gameData.lineupIntervalsText,
+        teamStatistic: 'pointsFastBreak'
+    }
+});
+
+export const teamPointsOffTurnoversGraphData = derived(gameData, ($gameData: any) =>  {
+    if ($gameData === undefined) return undefined;
+    return {
+        boxScore: $gameData.boxScore,
+        awayData: $gameData.awayTeam.pointsFromTurnovers,
+        homeData: $gameData.homeTeam.pointsFromTurnovers,
+        title: 'Points Off Turnovers',
+        lineupIntervals: $gameData.lineupIntervals,
+        lineupIntervalsText: $gameData.lineupIntervalsText,
+        teamStatistic: 'pointsFromTurnovers'
+    }
+});
+
+export const timeoutAnalysis = derived(gameData, ($gameData: any) =>  {
+    if ($gameData === undefined) return undefined;
+    return $gameData.timeoutAnalysis;
+});
+
+export const boxScore = derived(gameData, ($gameData: any) =>  {
+    if ($gameData === undefined) return undefined;
+    return $gameData.boxScore;
+});
