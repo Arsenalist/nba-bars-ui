@@ -44,172 +44,173 @@
 
 </script>
 <div class="starter-template">
-<main class="container-fluid">
-    <Router>
-    <Nav/>
-        <Route path="about" component={About} />
-        <Route path="/">
-            <DateList/>
-            <GameList/>
+    <main class="container-fluid">
+        <Router>
+            <Nav/>
+            <Route path="about" component={About}/>
+            <Route path="/">
+                <DateList/>
+                <GameList/>
             </Route>
-        <Route path="game/:gameId/*">
-            <DateList/>
-            <GameList/>
+            <Route path="game/:gameId/*">
+                <DateList/>
+                <GameList/>
+                <GameLoader/>
+                <GameTabs/>
+                <GameSummary boxScore={$boxScore}/>
+                <Route path="plus-minus">
 
-            <GameLoader/>
-
-
-        <GameTabs/>
-        <GameSummary boxScore={$boxScore}/>
-
-        <Route path="plus-minus">
-
-    <div class="row">
-        <div class="col">
-            <DifferentialGraph data={$differentialData}/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <TeamLineups title="Plus/Minus by Lineup" data={$lineupGraphData} textListName="labels" hoverListName="summary"/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <PlayerLineupGraph data={$awayPlayersLineupGraphData}/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <PlayerLineupGraph data={$homePlayersLineupGraphData}/>
-        </div>
-    </div>
-        </Route>
-        <Route path="ratings">
-        <div class="row">
-            <div class="col">
-                <TeamLineups title="Offensive Rating by Lineup" data={$lineupGraphData} textListName="ortg" hoverListName="ortgExplained" alphaColorListName="ortgAlphaColor" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <TeamLineups title="Defensive Rating by Lineup" data={$lineupGraphData} textListName="drtg" hoverListName="drtgExplained"  alphaColorListName="drtgAlphaColor"/>
-            </div>
-        </div>
-        </Route>
-
-        <Route path="rebounding">
-    <div class="row">
-        <div class="col">
-            <TeamLineups title="OREB% by Lineup" data={$lineupGraphData} textListName="offensiveReboundPercentage" hoverListName="offensiveReboundPercentageExplained"  alphaColorListName="offensiveReboundAlphaColor"/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <TeamLineups   title="DREB% by Lineup" data={$lineupGraphData} textListName="defensiveReboundPercentage" hoverListName="defensiveReboundPercentageExplained"  alphaColorListName="defensiveReboundAlphaColor"/>
-        </div>
-    </div>
-        </Route>
-        <Route path="usage">
-        <div class="row">
-            <div class="col">
-                <LineupUsageGraph data={$awayPlayersLineupGraphData}/>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <LineupUsageGraph data={$homePlayersLineupGraphData}/>
-            </div>
-        </div>
-        </Route>
-        <Route path="scoring">
-
-        <div class="row">
-            <div class="col">
-                <div class="row">
-                    <div class="col">
-                        <TeamComparisonByPeriodGraph data={$teamPointsInThePaintGraphData}/>
+                    <div class="row">
+                        <div class="col">
+                            <DifferentialGraph data={$differentialData}/>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <TeamComparisonByPeriodGraph data={$teamFastBreakPointsGraphData}/>
+                    <div class="row">
+                        <div class="col">
+                            <TeamLineups title="Plus/Minus by Lineup" data={$lineupGraphData} textListName="labels"
+                                         hoverListName="summary"/>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <TeamComparisonByPeriodGraph data={$teamPointsOffTurnoversGraphData}/>
+                    <div class="row">
+                        <div class="col">
+                            <PlayerLineupGraph data={$awayPlayersLineupGraphData}/>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <TeamShotDistanceGraph data={$awayTeamShotDistanceData}/>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <TeamShotDistanceGraph data={$homeTeamShotDistanceData}/>
-                </div>
-            </div>
-        </div>
-        </Route>
-
-        <Route path="player-charts">
-    <div class="row">
-        <div class="col">
-            <TeamInfo team={$boxScore.awayTeam}/>
-            <PlayerList players={$awayPlayers}/>
-        </div>
-        <div class="col">
-            <TeamInfo team={$boxScore.homeTeam}/>
-            <PlayerList players={$homePlayers}/>
-        </div>
-     </div>
-    <div class="row">
-        <div class="col">
-            <PlayerGameDetail player={$player}/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <PlayerPeriodBarCharts data={$periodBarChartsGraphData}/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <AssistDistributionGraph data={$assistDistributionGraphData}/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <TeamShotDistanceGraph data={$playerShotDistanceData}/>
-        </div>
-    </div>
-        </Route>
-        <Route path="box-score">
-        <div class="row">
-            <div class="col">
-                <BoxScore boxScore={$boxScore}/>
-            </div>
-        </div>
-        </Route>
-        <Route path="timeout-analysis">
-
-        <div class="row">
-            <div class="col">
-                <TimeoutAnalysis timeoutAnalysis={$timeoutAnalysis} boxScore={$boxScore}/>
-            </div>
-        </div>
-        </Route>
-            <Route path="scoring-runs">
-                <div class="row">
-                    <div class="col">
-                        <ScoringRuns scoringRunData={$scoringRunData} boxScore={$boxScore}/>
+                    <div class="row">
+                        <div class="col">
+                            <PlayerLineupGraph data={$homePlayersLineupGraphData}/>
+                        </div>
                     </div>
-                </div>
+                </Route>
+                <Route path="ratings">
+                    <div class="row">
+                        <div class="col">
+                            <TeamLineups title="Offensive Rating by Lineup" data={$lineupGraphData} textListName="ortg"
+                                         hoverListName="ortgExplained" alphaColorListName="ortgAlphaColor"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <TeamLineups title="Defensive Rating by Lineup" data={$lineupGraphData} textListName="drtg"
+                                         hoverListName="drtgExplained" alphaColorListName="drtgAlphaColor"/>
+                        </div>
+                    </div>
+                </Route>
+                <Route path="rebounding">
+                    <div class="row">
+                        <div class="col">
+                            <TeamLineups title="OREB% by Lineup" data={$lineupGraphData}
+                                         textListName="offensiveReboundPercentage"
+                                         hoverListName="offensiveReboundPercentageExplained"
+                                         alphaColorListName="offensiveReboundAlphaColor"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <TeamLineups title="DREB% by Lineup" data={$lineupGraphData}
+                                         textListName="defensiveReboundPercentage"
+                                         hoverListName="defensiveReboundPercentageExplained"
+                                         alphaColorListName="defensiveReboundAlphaColor"/>
+                        </div>
+                    </div>
+                </Route>
+                <Route path="usage">
+                    <div class="row">
+                        <div class="col">
+                            <LineupUsageGraph data={$awayPlayersLineupGraphData}/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <LineupUsageGraph data={$homePlayersLineupGraphData}/>
+                        </div>
+                    </div>
+                </Route>
+                <Route path="scoring">
+                    <div class="row">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <TeamComparisonByPeriodGraph data={$teamPointsInThePaintGraphData}/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <TeamComparisonByPeriodGraph data={$teamFastBreakPointsGraphData}/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <TeamComparisonByPeriodGraph data={$teamPointsOffTurnoversGraphData}/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <TeamShotDistanceGraph data={$awayTeamShotDistanceData}/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <TeamShotDistanceGraph data={$homeTeamShotDistanceData}/>
+                            </div>
+                        </div>
+                    </div>
+                </Route>
+                <Route path="player-charts">
+                    <div class="row">
+                        <div class="col">
+                            <TeamInfo team={$boxScore.awayTeam}/>
+                            <PlayerList players={$awayPlayers}/>
+                        </div>
+                        <div class="col">
+                            <TeamInfo team={$boxScore.homeTeam}/>
+                            <PlayerList players={$homePlayers}/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <PlayerGameDetail player={$player}/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <PlayerPeriodBarCharts data={$periodBarChartsGraphData}/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <AssistDistributionGraph data={$assistDistributionGraphData}/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <TeamShotDistanceGraph data={$playerShotDistanceData}/>
+                        </div>
+                    </div>
+                </Route>
+                <Route path="box-score">
+                    <div class="row">
+                        <div class="col">
+                            <BoxScore boxScore={$boxScore}/>
+                        </div>
+                    </div>
+                </Route>
+                <Route path="timeout-analysis">
+                    <div class="row">
+                        <div class="col">
+                            <TimeoutAnalysis timeoutAnalysis={$timeoutAnalysis} boxScore={$boxScore}/>
+                        </div>
+                    </div>
+                </Route>
+                <Route path="scoring-runs">
+                    <div class="row">
+                        <div class="col">
+                            <ScoringRuns scoringRunData={$scoringRunData} boxScore={$boxScore}/>
+                        </div>
+                    </div>
+                </Route>
             </Route>
-        </Route>
-    </Router>
-</main>
+        </Router>
+    </main>
 </div>
