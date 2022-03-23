@@ -40,19 +40,22 @@
     import LineupUsageGraph from "./LineupUsageGraph.svelte";
     import GameLoader from "./GameLoader.svelte";
     import ScoringRuns from "./ScoringRuns.svelte";
+    import About from "./About.svelte";
 
 </script>
 <div class="starter-template">
 <main class="container-fluid">
-    <Nav/>
     <Router>
-    <DateList/>
-    <div class="row">
-        <div class="col text-center d-flex justify-content-center">
+    <Nav/>
+        <Route path="about" component={About} />
+        <Route path="/">
+            <DateList/>
             <GameList/>
-        </div>
-    </div>
+            </Route>
         <Route path="game/:gameId/*">
+            <DateList/>
+            <GameList/>
+
             <GameLoader/>
 
 

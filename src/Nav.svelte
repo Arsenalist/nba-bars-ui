@@ -1,3 +1,6 @@
+<script>
+    import { Link } from "svelte-navigator";
+</script>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <a class="navbar-brand" href="/">Bars</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -6,6 +9,9 @@
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
+            <Link to="about">
+                <span class="nav-link">About</span>
+            </Link>
         </ul>
     </div>
 </nav>

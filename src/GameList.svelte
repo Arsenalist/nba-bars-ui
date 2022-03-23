@@ -23,6 +23,9 @@
         promise = getGamesIfSelectedDateIsAvailable($selectedDate);
     });
 </script>
+<div class="row">
+    <div class="col text-center d-flex justify-content-center">
+
 {#await promise then games}
     {#if games}
 <div class="btn-group game-list">
@@ -42,3 +45,5 @@
 </div>
         {/if}
 {/await}
+    </div>
+</div>
