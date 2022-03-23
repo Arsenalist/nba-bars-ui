@@ -8,7 +8,7 @@
         Shows top five scoring runs for each team. The maximum duration of a run is 15 minutes.
     </p>
     <h3>{boxScore.awayTeam.teamName}</h3>
-    <TeamScoringRun scoringRuns={scoringRunData.awayScoringRuns}/>
+    <TeamScoringRun boxScore={boxScore} scoringRuns={scoringRunData.awayScoringRuns}/>
     <h3>{boxScore.homeTeam.teamName}</h3>
-    <TeamScoringRun scoringRuns={scoringRunData.homeScoringRuns}/>
+    <TeamScoringRun boxScore={boxScore} scoringRuns={scoringRunData.homeScoringRuns}/>
 {/if}
