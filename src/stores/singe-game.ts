@@ -95,6 +95,14 @@ export const teamFastBreakPointsGraphData = derived(gameData, ($gameData: any) =
     }
 });
 
+export const scoringRunData = derived(gameData, ($gameData: any) => {
+    if ($gameData === undefined) return undefined;
+    return {
+        awayScoringRuns: $gameData.scoringRuns.awayScoringRuns,
+        homeScoringRuns: $gameData.scoringRuns.homeScoringRuns
+    }
+});
+
 export const teamPointsOffTurnoversGraphData = derived(gameData, ($gameData: any) =>  {
     if ($gameData === undefined) return undefined;
     return {

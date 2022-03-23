@@ -17,7 +17,8 @@
         periodBarChartsGraphData,
         assistDistributionGraphData,
         playerShotDistanceData,
-        player
+        player,
+        scoringRunData
     } from './stores/singe-game';
     import {Router, Route} from "svelte-navigator";
     import GameList from "./GameList.svelte";
@@ -38,6 +39,7 @@
     import TimeoutAnalysis from "./TimeoutAnalysis.svelte";
     import LineupUsageGraph from "./LineupUsageGraph.svelte";
     import GameLoader from "./GameLoader.svelte";
+    import ScoringRuns from "./ScoringRuns.svelte";
 
 </script>
 <div class="starter-template">
@@ -197,6 +199,13 @@
             </div>
         </div>
         </Route>
+            <Route path="scoring-runs">
+                <div class="row">
+                    <div class="col">
+                        <ScoringRuns scoringRunData={$scoringRunData} boxScore={$boxScore}/>
+                    </div>
+                </div>
+            </Route>
         </Route>
     </Router>
 </main>

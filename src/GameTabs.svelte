@@ -65,6 +65,13 @@
                        on:click={onTabClick}>Timeout Analysis</span>
                     </Link>
                 </li>
+                <li class="nav-item">
+                    <Link to="scoring-runs">
+                    <span class="nav-link" aria-current="page" data-tab-name="scoring-runs"
+                          class:active="{$selectedTab === 'scoring-runs'}"
+                          on:click={onTabClick}>Scoring Runs</span>
+                    </Link>
+                </li>
             </ul>
         </div>
     </div>
